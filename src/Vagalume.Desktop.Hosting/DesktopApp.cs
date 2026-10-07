@@ -1,4 +1,5 @@
-namespace Vagalume.Host.Desktop;
+using Vagalume.Desktop.Hosting;
+namespace Vagalume.Desktop.Hosting;
 
 /// <summary>
 /// The desktop web application together with the secret that opens it.

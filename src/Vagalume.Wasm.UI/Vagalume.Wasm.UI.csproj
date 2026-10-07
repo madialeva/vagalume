@@ -1,0 +1,17 @@
+<Project Sdk="Microsoft.NET.Sdk.BlazorWebAssembly">
+
+  <PropertyGroup>
+    <!-- The host copies index.html as it is, so it must not contain fingerprint placeholders. -->
+    <WasmFingerprintAssets>false</WasmFingerprintAssets>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Microsoft.AspNetCore.Components.WebAssembly" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\Vagalume.Api.Contracts\Vagalume.Api.Contracts.csproj" />
+    <ProjectReference Include="..\Vagalume.Api.Client\Vagalume.Api.Client.csproj" />
+  </ItemGroup>
+
+</Project>

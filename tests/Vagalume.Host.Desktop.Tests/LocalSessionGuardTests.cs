@@ -1,6 +1,7 @@
 using System.Collections.Concurrent;
 using System.Net;
 using Microsoft.Extensions.Logging;
+using Vagalume.Desktop.Hosting;
 using Vagalume.Host.Desktop;
 
 namespace Vagalume.Host.Desktop.Tests;

@@ -9,9 +9,10 @@ accounting product written in Java, and may end up as a project detached from
 it. Nothing here is production-ready: the goal is to gather evidence before
 deciding anything.
 
-> **Status:** early exploration. The embedded PostgreSQL host and the Blazor
-> Server skeleton (web host and Electron.NET desktop host) are implemented and
-> validated on Linux x64; Windows x64 is not validated yet.
+> **Status:** early exploration. The embedded PostgreSQL host, the Blazor Server
+> skeleton and the Blazor WebAssembly alternative (both with an Electron.NET
+> desktop host) are implemented and validated on Linux x64; Windows x64 is not
+> validated yet.
 
 ---
 
@@ -42,7 +43,8 @@ Work is tracked as GitHub issues. The table shows what is planned.
 | Status | Feature                                                                                                           | Target | Issue |
 | :----: | ----------------------------------------------------------------------------------------------------------------- | :----: | :---: |
 |   ✅   | Embedded PostgreSQL host: pinned and verified binaries, restricted access, crash recovery, backup and restore     | v0.1.0 |  #1   |
-|   ⬜   | Blazor Server skeleton: layered solution, EF Core, web host, Electron.NET desktop host and packaging              | v0.1.0 |  #6   |
+|   ✅   | Blazor Server skeleton: layered solution, EF Core, web host, Electron.NET desktop host and packaging              | v0.1.0 |  #6   |
+|   ⬜   | Blazor WebAssembly UI without Razor, REST API and Electron.NET desktop host                                       | v0.1.0 |  #15  |
 
 ## Platforms
 
@@ -156,6 +158,32 @@ On Windows x64 the same command with `-r win-x64` is expected to produce a
 portable executable, but **it has not been built or run** (see the findings).
 
 PostgreSQL refuses to run as `root`; the host fails early with a clear error.
+
+### WebAssembly alternative
+
+A second UI architecture lives next to the Blazor Server one: the interface runs
+as **Blazor WebAssembly**, is written in C# with **no Razor** (components are
+classes that return a tree built with a small markup DSL), and talks to the
+server only through a **REST API**, so it never sees the database.
+
+| Path                                   | Contents                                                              |
+| -------------------------------------- | --------------------------------------------------------------------- |
+| `src/Vagalume.Api.Contracts`           | DTOs, routes, `INotesApi` and the client-side exceptions; depends on nothing |
+| `src/Vagalume.Api`                     | Minimal APIs over `Core`, errors as `ProblemDetails`                  |
+| `src/Vagalume.Api.Client`              | `HttpClient` implementation of `INotesApi`                            |
+| `src/Vagalume.Wasm.UI`                 | The WebAssembly UI and its markup DSL (no `.razor` files)             |
+| `src/Vagalume.Desktop.Hosting`         | Session token, local-port guard and PostgreSQL start/stop shared by both desktop hosts |
+| `src/Vagalume.Host.Wasm.Desktop`       | Electron window serving the WASM app and the API from one local origin |
+
+```bash
+dotnet run --project src/Vagalume.Host.Wasm.Desktop
+dotnet publish src/Vagalume.Host.Wasm.Desktop -c Release -r linux-x64 --self-contained   # package, build on the target OS
+```
+
+It needs the same prerequisites as the other desktop host (Node.js 22 or later
+and a display). The first request of the window carries the session token, which
+is exchanged for a cookie; that cookie then also accompanies the download of the
+WebAssembly files and every API call, because everything shares one origin.
 
 ## Findings report (embedded PostgreSQL spike)
 
@@ -454,6 +482,131 @@ the package, a 0.x package that needs careful pinning, and a Windows build that
 is completely unverified. Before committing to it, validate Windows x64 in CI,
 fix or design around the orphan processes, and compare it with a lighter shell
 such as Photino.Blazor, which this change did not evaluate.
+
+## Findings report (Blazor WebAssembly without Razor)
+
+Results of the change that built the WebAssembly alternative, measured on
+Linux x64 with the packaged applications run with no network, as a regular
+user and with an empty `PATH`.
+
+### Does it work?
+
+**Yes, including in desktop mode.** The WebAssembly interface runs inside the
+Electron window, loads its files and calls the REST API of the local server with
+the session cookie of the window, and the database is never visible to it. In a
+real window, a click on *Añadir* with an empty text produces a `400` from the
+server and the interface shows its message. Nothing in the client references
+`Core`, `Data`, EF Core or Npgsql: an architecture test checks the project
+references and another one checks the files the browser downloads.
+
+### Comparison with Blazor Server (same machine, same method)
+
+| Measure                                          | Blazor Server | Blazor WebAssembly |
+| ------------------------------------------------ | ------------: | -----------------: |
+| Package (`.tar.xz`)                              |        133 MB |             145 MB |
+| Unpacked application                             |        524 MB |             550 MB |
+| Client files the browser downloads               | one script, ~200 KB | 8.8 MiB raw, 2.7 MiB Brotli, 3.4 MiB gzip |
+| Cold start: window drawn / notes content drawn   | 3.4 s / 3.4 s |      3.1 s / 3.7 s |
+| Warm start: window drawn / notes content drawn   | 1.7 s / 1.7 s |      1.7 s / 2.0 s |
+| Memory after start (RSS sum, shared pages counted per process) | ~960 MiB | ~1010 MiB |
+| of which Chromium renderer                       |       158 MiB |            229 MiB |
+| of which .NET host                               |       179 MiB |            162 MiB |
+| of which PostgreSQL                              |       226 MiB |            226 MiB |
+
+Each figure comes from one run with a 0.25 s polling resolution, so differences
+below about half a second are noise. The honest summary is that **WebAssembly
+costs little more than Blazor Server in desktop**: about 12 MB more in the
+package, about 0.3 to 0.5 s more until the notes appear, and about 70 MiB more
+in the renderer, partly offset by a lighter .NET host. The 2.7 MiB of
+compressed runtime is a local file here, so it costs nothing in bandwidth;
+it would matter in the web mode.
+
+### Writing the interface without Razor
+
+The notes page is `NotesModel` (state and behavior, 93 lines), `NotesView` (the
+view as a function of the model, 44 lines) and `NotesPage` (24 lines), on top of
+a markup DSL of about 250 lines in one folder. The Blazor Server page, with
+Razor, is one 110-line file.
+
+```csharp
+Form(
+    Class("new-note"),
+    OnSubmit(model.CreateAsync),
+    Input(AriaLabel("Texto de la nota"), BindValue(model.NewText, v => model.NewText = v)),
+    Button(Type("submit"), "Añadir")),
+When(model.Message is not null, () => P(Class("message"), Role("alert"), model.Message!)),
+```
+
+- **What works well.** It is ordinary C#: the compiler and refactoring tools see
+  every call, there is no second language to learn, and the view is a pure
+  function, so the whole page is tested without a browser (7 tests of the page
+  and 8 of the DSL and its emitter, 16 in all). Text is never interpreted as
+  markup.
+- **What is worse than Razor.** It is more code overall (the page is split in
+  three files and the DSL is extra), plain HTML cannot be pasted in, and every
+  attribute and element needs a helper. Event handlers and bindings are
+  limited to what the DSL defines; a missing helper is written with `El(...)` and
+  the generic attributes.
+- **Verdict.** For a page this size the DSL is comfortable, and the separation
+  between model, view and component is a clearer design than Razor's mixed
+  file. Whether it scales to a whole product with many components is **not
+  shown** by one page.
+
+### Test results
+
+| Check                                                                                   | Linux x64          | Windows x64    |
+| --------------------------------------------------------------------------------------- | :----------------: | :------------: |
+| API: create, list, update, validation 400, not found 404, conflict 409, no internals leaked | passes (8 tests) | **not tested** |
+| HTTP client against the real API, errors mapped to the contract's exceptions            | passes (5 tests)   | **not tested** |
+| DSL, emitter, notes page logic and view, client bundle contents                         | passes (16 tests)  | **not tested** |
+| Layer rules, no `.razor` files in the WebAssembly UI                                    | passes (3 tests)   | **not tested** |
+| WASM desktop host: session guard, boot files, API with the cookie, persistence, root, token not logged | passes (7 tests) | **not tested** |
+| Shared desktop pieces keep the Blazor Server desktop host unchanged                     | passes (10 tests)  | **not tested** |
+| Real Electron window: WASM boots, lists notes from the API, validation message from a click | verified by hand | **not tested** |
+| Packaged `.tar.xz`: strict run, cold and warm start, clean quit                         | verified by hand   | **not built**  |
+| Typing a note in the real window                                                        | **not verified** (no keyboard input without a window manager) | **not tested** |
+
+### Findings worth knowing
+
+- **The packaged app first showed a blank page.** The host copies `index.html`
+  from the WebAssembly project as it is, so the fingerprint placeholder of the
+  loader script (`blazor.webassembly#[.{fingerprint}].js`) was never replaced and
+  the browser never asked for the WebAssembly files. Running with `dotnet run` hid
+  it, because the static asset pipeline processes the file there. The fix was to
+  disable fingerprinting of the boot files and write the literal script name; a
+  test now checks the page. Packaged runs are the only place this showed up.
+- **The boot files do carry the session cookie.** The worry that the browser
+  might download the WebAssembly files without credentials did not materialize:
+  one origin means one cookie for the page, the runtime and the API.
+- **Unknown `/api` paths must not fall through to `index.html`**, or a typo in a
+  call would return `200` with HTML; the host answers `404` for them.
+- **Everything inherited from the Blazor Server skeleton still applies:** orphaned
+  Electron and PostgreSQL processes after a forced kill, Windows not built or
+  run, a `0.x` Electron.NET Core package and the weight of Chromium.
+
+### What could not be validated
+
+- **Windows x64**, entirely (issue #2).
+- **Typing in the window.** Mouse clicks were automated, keyboard input was not.
+- **The web mode with a remote server**, which was not built in this change: the
+  API is independent of the host, but no web host for the WebAssembly UI exists
+  yet, and the cost of the 2.7 MiB download over a real network was not measured.
+- **Behavior at scale**: one page, one entity, no routing, no authentication.
+
+### Recommendation
+
+WebAssembly with a REST API and a Razor-free C# interface is **viable in desktop
+mode** and costs only a little more than Blazor Server there, while giving the
+clean separation the author wanted: a server with no UI logic, a client that can
+never reach the database, and views that are plain, testable C#. It is
+therefore a legitimate alternative, not a dead end.
+
+It is not yet a replacement. The decision between the two depends on things this
+change cannot settle: how well the home-made DSL holds up on a real product (a
+component library or an established C# markup library may be worth a look), the
+web mode where the download and the lack of a persistent connection matter in
+opposite directions, and Windows. Before choosing, build one more realistic
+screen with each approach and run the web mode of the WebAssembly variant.
 
 ## Design record
 

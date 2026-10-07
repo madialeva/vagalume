@@ -1,19 +1,29 @@
 <Solution>
   <Folder Name="/src/">
+    <Project Path="src/Vagalume.Api.Client/Vagalume.Api.Client.csproj" />
+    <Project Path="src/Vagalume.Api.Contracts/Vagalume.Api.Contracts.csproj" />
+    <Project Path="src/Vagalume.Api/Vagalume.Api.csproj" />
     <Project Path="src/Vagalume.Core/Vagalume.Core.csproj" />
     <Project Path="src/Vagalume.Data/Vagalume.Data.csproj" />
+    <Project Path="src/Vagalume.Desktop.Hosting/Vagalume.Desktop.Hosting.csproj" />
     <Project Path="src/Vagalume.Host.Desktop/Vagalume.Host.Desktop.csproj" />
+    <Project Path="src/Vagalume.Host.Wasm.Desktop/Vagalume.Host.Wasm.Desktop.csproj" />
     <Project Path="src/Vagalume.Host.Web/Vagalume.Host.Web.csproj" />
     <Project Path="src/Vagalume.Postgres.Embedded/Vagalume.Postgres.Embedded.csproj" />
     <Project Path="src/Vagalume.UI/Vagalume.UI.csproj" />
+    <Project Path="src/Vagalume.Wasm.UI/Vagalume.Wasm.UI.csproj" />
   </Folder>
   <Folder Name="/tests/">
+    <Project Path="tests/Vagalume.Api.Client.Tests/Vagalume.Api.Client.Tests.csproj" />
+    <Project Path="tests/Vagalume.Api.Tests/Vagalume.Api.Tests.csproj" />
     <Project Path="tests/Vagalume.Architecture.Tests/Vagalume.Architecture.Tests.csproj" />
     <Project Path="tests/Vagalume.Core.Tests/Vagalume.Core.Tests.csproj" />
     <Project Path="tests/Vagalume.Data.Tests/Vagalume.Data.Tests.csproj" />
     <Project Path="tests/Vagalume.Host.Desktop.Tests/Vagalume.Host.Desktop.Tests.csproj" />
+    <Project Path="tests/Vagalume.Host.Wasm.Desktop.Tests/Vagalume.Host.Wasm.Desktop.Tests.csproj" />
     <Project Path="tests/Vagalume.Host.Web.Tests/Vagalume.Host.Web.Tests.csproj" />
     <Project Path="tests/Vagalume.Postgres.Embedded.Tests/Vagalume.Postgres.Embedded.Tests.csproj" />
     <Project Path="tests/Vagalume.Testing/Vagalume.Testing.csproj" />
+    <Project Path="tests/Vagalume.Wasm.UI.Tests/Vagalume.Wasm.UI.Tests.csproj" />
   </Folder>
 </Solution>

@@ -1,5 +1,6 @@
 using Microsoft.Extensions.DependencyInjection;
 using Vagalume.Core;
+using Vagalume.Desktop.Hosting;
 using Vagalume.Host.Desktop;
 using Vagalume.Postgres.Embedded;
 using Vagalume.Testing;

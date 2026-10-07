@@ -22,9 +22,13 @@ the GitHub issues and in the README.
 - **.NET 10** (SDK pinned in `global.json`), C# with nullable reference types
   enabled and warnings treated as errors (set in `Directory.Build.props`).
 - xUnit for tests, Npgsql as the PostgreSQL driver, EF Core (PostgreSQL only) for
-  persistence, Blazor Server (interactive server rendering only, no WebAssembly,
-  no REST API between UI and logic) for the UI, Electron.NET Core as the desktop
-  shell. Node.js 22 or later is needed to build and run the desktop host.
+  persistence, Electron.NET Core as the desktop shell. Node.js 22 or later is
+  needed to build and run the desktop hosts.
+- Two UI architectures coexist so they can be compared. **Blazor Server**
+  (`Vagalume.UI`, interactive server rendering only, Razor, no REST API between UI
+  and logic) and **Blazor WebAssembly** (`Vagalume.Wasm.UI`, C# with a markup DSL
+  and no Razor, talking to the server only through the REST API of `Vagalume.Api`;
+  the client never references `Core`, `Data` or the database).
 - PostgreSQL binaries come from the Zonky `embedded-postgres-binaries` artifacts
   on Maven Central, for **Linux x64 and Windows x64** only (no macOS, no ARM).
   They are downloaded **at build time**, pinned by version and SHA-256 in a lock
@@ -49,7 +53,9 @@ the GitHub issues and in the README.
 | `dotnet format`                           | Apply formatting                              |
 | `dotnet run --project src/Vagalume.Host.Web` | Run the web host (needs `ConnectionStrings__Vagalume`) |
 | `dotnet run --project src/Vagalume.Host.Desktop` | Run the desktop host in an Electron window |
-| `dotnet publish src/Vagalume.Host.Desktop -c Release -r linux-x64 --self-contained` | Package the desktop app (build on the target OS) |
+| `dotnet run --project src/Vagalume.Host.Wasm.Desktop` | Run the WebAssembly desktop host in an Electron window |
+| `dotnet publish src/Vagalume.Host.Desktop -c Release -r linux-x64 --self-contained` | Package the Blazor Server desktop app (build on the target OS) |
+| `dotnet publish src/Vagalume.Host.Wasm.Desktop -c Release -r linux-x64 --self-contained` | Package the WebAssembly desktop app (build on the target OS) |
 
 Solution layout (`Vagalume.slnx`):
 
@@ -59,6 +65,18 @@ Solution layout (`Vagalume.slnx`):
 - `src/Vagalume.Host.Web`: composition root of the server host (external PostgreSQL).
 - `src/Vagalume.Host.Desktop`: composition root of the desktop host (embedded
   PostgreSQL, Electron.NET, session-token guard).
+- `src/Vagalume.Api.Contracts`: DTOs, routes, `INotesApi` and client exceptions of the
+  REST API; depends on nothing.
+- `src/Vagalume.Api`: minimal APIs over `Core`; depends on `Core` and the contracts.
+- `src/Vagalume.Api.Client`: `HttpClient` implementation of `INotesApi`; depends only
+  on the contracts.
+- `src/Vagalume.Wasm.UI`: Blazor WebAssembly UI written in C# with a markup DSL and
+  **no `.razor` or `.cshtml` files**; depends only on the contracts and the client,
+  so the browser never receives `Core`, `Data` or the database.
+- `src/Vagalume.Desktop.Hosting`: session token, local-port guard and PostgreSQL
+  start/stop shared by both desktop hosts; knows nothing about Electron.
+- `src/Vagalume.Host.Wasm.Desktop`: Electron host that serves the WASM app and the
+  API from one local origin behind the session token.
 - `src/Vagalume.Postgres.Embedded`: the embedded PostgreSQL host library.
 - `tests/`: one project per source project, `Vagalume.Testing` (shared real
   PostgreSQL test environment) and `Vagalume.Architecture.Tests` (reads the
@@ -249,5 +267,10 @@ Each OpenSpec change is tracked on GitHub with this cycle:
   Electron.NET desktop hosts; validated on Linux x64, Windows x64 not validated,
   orphan processes in Electron.NET Core are an open risk: see the findings
   report in `README.md`).
-- **Active change:** none.
-- **Repository state:** the default branch is `develop/v0.1.0`.
+- **Active change:** `is15-wasm-ui-skeleton`: implemented and validated on Linux
+  x64, waiting for the user's review and archive. The WebAssembly alternative
+  works in desktop mode at a small cost over Blazor Server; Windows x64 and
+  typing in the real window are not validated (see the findings report in
+  `README.md`).
+- **Repository state:** the default branch is `develop/v0.1.0`; the change work
+  lives on `change/is15-wasm-ui-skeleton`.

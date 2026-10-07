@@ -1,0 +1,7 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <ItemGroup>
+    <ProjectReference Include="..\Vagalume.Api.Contracts\Vagalume.Api.Contracts.csproj" />
+  </ItemGroup>
+
+</Project>

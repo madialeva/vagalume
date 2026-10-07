@@ -2,10 +2,14 @@
 
   <ItemGroup>
     <PackageReference Include="Npgsql" />
+    <FrameworkReference Include="Microsoft.AspNetCore.App" />
   </ItemGroup>
 
   <ItemGroup>
     <ProjectReference Include="..\..\src\Vagalume.Postgres.Embedded\Vagalume.Postgres.Embedded.csproj" />
+    <ProjectReference Include="..\..\src\Vagalume.Core\Vagalume.Core.csproj" />
+    <ProjectReference Include="..\..\src\Vagalume.Data\Vagalume.Data.csproj" />
+    <ProjectReference Include="..\..\src\Vagalume.Api\Vagalume.Api.csproj" />
   </ItemGroup>
 
 </Project>
