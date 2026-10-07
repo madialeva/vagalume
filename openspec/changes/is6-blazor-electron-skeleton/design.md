@@ -90,7 +90,7 @@ El servidor web del escritorio se construye en una clase propia que no conoce El
 
 El host de escritorio genera un token con un generador criptográfico en cada arranque y lo guarda solo en memoria. Un middleware, antes de cualquier otro, aplica estas reglas:
 
-1. Rechaza (403, sin cuerpo) toda petición cuyo `Host` no sea `127.0.0.1:<puerto>`, para impedir el *DNS rebinding*.
+1. Rechaza (403, sin cuerpo) toda petición cuyo nombre de `Host` no sea `127.0.0.1`, para impedir el *DNS rebinding* (el puerto no aporta nada: un dominio atacante llevaría su propio nombre en la cabecera).
 2. Acepta la petición si trae la cookie de sesión con el token (comparación en tiempo constante).
 3. Si trae el token como parámetro de consulta, establece la cookie (`HttpOnly`, `SameSite=Strict`) y redirige a la misma ruta sin el parámetro.
 4. En cualquier otro caso responde 403 sin cuerpo.

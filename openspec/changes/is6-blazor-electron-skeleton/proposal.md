@@ -53,7 +53,7 @@ Ninguna. La capability `embedded-postgres-host` se consume tal cual, sin cambiar
 ## Impact
 
 - **Repositorio**: nuevos proyectos bajo `src/` (`Vagalume.Core`, `Vagalume.Data`, `Vagalume.UI`, `Vagalume.Host.Web`, `Vagalume.Host.Desktop`) y bajo `tests/`, incluido un proyecto de apoyo con el entorno de pruebas de PostgreSQL que hoy vive dentro de `Vagalume.Postgres.Embedded.Tests`. Manifiesto de herramientas local (`dotnet-ef`). Se amplía la configuración de `.gitignore` para los resultados de empaquetado. Se actualizan `README.md` y `AGENTS.md`.
-- **Dependencias NuGet nuevas (aprobadas por este change)**: `ElectronNET.Core` y `ElectronNET.Core.AspNet` (Host.Desktop), `Microsoft.EntityFrameworkCore`, `Microsoft.EntityFrameworkCore.Design` y `Npgsql.EntityFrameworkCore.PostgreSQL` (Data), `Microsoft.AspNetCore.Mvc.Testing` (pruebas de los hosts).
+- **Dependencias NuGet nuevas (aprobadas por este change)**: `ElectronNET.Core` y `ElectronNET.Core.AspNet` (Host.Desktop), `Microsoft.EntityFrameworkCore`, `Microsoft.EntityFrameworkCore.Relational` (fijado para unificar versiones con el proveedor de Npgsql), `Microsoft.EntityFrameworkCore.Design` y `Npgsql.EntityFrameworkCore.PostgreSQL` (Data), `Microsoft.AspNetCore.Mvc.Testing` (pruebas de los hosts).
 - **Herramientas de build nuevas**: Node.js 22 o posterior y las dependencias de npm que traiga Electron.NET Core (Electron y el empaquetador), solo en tiempo de build. La aplicación en ejecución no descarga nada.
 - **CI**: sin cambios; sigue sin existir (issue #3).
 - **Fuera de alcance**: ver *Non-Goals* en `design.md`.

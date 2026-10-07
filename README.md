@@ -9,8 +9,9 @@ accounting product written in Java, and may end up as a project detached from
 it. Nothing here is production-ready: the goal is to gather evidence before
 deciding anything.
 
-> **Status:** early exploration. The first change (embedded PostgreSQL host) is
-> implemented and validated on Linux x64; Windows x64 is not validated yet.
+> **Status:** early exploration. The embedded PostgreSQL host and the Blazor
+> Server skeleton (web host and Electron.NET desktop host) are implemented and
+> validated on Linux x64; Windows x64 is not validated yet.
 
 ---
 
@@ -41,10 +42,7 @@ Work is tracked as GitHub issues. The table shows what is planned.
 | Status | Feature                                                                                                           | Target | Issue |
 | :----: | ----------------------------------------------------------------------------------------------------------------- | :----: | :---: |
 |   ✅   | Embedded PostgreSQL host: pinned and verified binaries, restricted access, crash recovery, backup and restore     | v0.1.0 |  #1   |
-
-Other directions are under evaluation but not decided: Blazor Server as the UI
-shared by both modes, Electron.NET or Photino as desktop shell, and EF Core
-against PostgreSQL only.
+|   ⬜   | Blazor Server skeleton: layered solution, EF Core, web host, Electron.NET desktop host and packaging              | v0.1.0 |  #6   |
 
 ## Platforms
 
@@ -53,6 +51,7 @@ Linux x64 and Windows x64. macOS and ARM are out of scope.
 ## Requirements
 
 - **.NET 10 SDK**.
+- **Node.js 22 or later**, only to build and run the desktop host.
 - `tar` with xz support (included in Linux and in Windows 10 or later).
 - Internet access the first time you build, to download the PostgreSQL binaries
   (they are never downloaded at runtime).
@@ -63,8 +62,13 @@ Layout:
 
 | Path                                      | Contents                                                              |
 | ----------------------------------------- | --------------------------------------------------------------------- |
+| `src/Vagalume.Core`                       | Domain and use cases (plain .NET, depends on nothing)                 |
+| `src/Vagalume.Data`                       | EF Core persistence on PostgreSQL and the single migration chain      |
+| `src/Vagalume.UI`                         | Blazor Razor Class Library shared by both hosts                       |
+| `src/Vagalume.Host.Web`                   | ASP.NET Core host for a server, with an external PostgreSQL           |
+| `src/Vagalume.Host.Desktop`               | The same application in an Electron.NET window, with embedded PostgreSQL |
 | `src/Vagalume.Postgres.Embedded`          | The embedded PostgreSQL host library                                  |
-| `tests/Vagalume.Postgres.Embedded.Tests`  | Unit tests and integration tests (they start a real PostgreSQL)       |
+| `tests/`                                  | One test project per source project, plus `Vagalume.Testing` (shared PostgreSQL test environment) and `Vagalume.Architecture.Tests` (layer rules) |
 | `eng/`                                    | Binaries lock file and the file-based .NET script that fetches them   |
 | `artifacts/postgres/<platform>/`          | Downloaded binaries (git-ignored, created by the build)               |
 
@@ -389,8 +393,67 @@ all of this may change.
 - **The PostgreSQL copy is larger than the archive** (about 123 MB in the
   package) because symbolic links in the Linux distribution are copied as files.
 
-Conclusion so far: workable and worth continuing, provided the orphan
-behavior is handled and the Electron version is pinned explicitly.
+### Test results
+
+| Check                                                                                 | Linux x64             | Windows x64    |
+| ------------------------------------------------------------------------------------- | :-------------------: | :------------: |
+| Layer rules (`Core` knows nothing, `Data` and `UI` only `Core`, hosts compose)         | passes (2 tests)      | **not tested** |
+| Use cases and validation, conflict on a stale version                                  | passes (8 tests)      | **not tested** |
+| EF Core on real PostgreSQL: migrate, persist, restart, repeated migration, `xmin`      | passes (5 tests)      | **not tested** |
+| Web host: starts, serves the page and the Blazor script, persists, two browsers, missing key, unreachable database | passes (4 tests) | **not tested** |
+| Desktop host: first start, second start keeps notes, stops PostgreSQL, rejects `root`, recovers from a killed PostgreSQL | passes (5 tests) | **not tested** |
+| Session token: no token, wrong token, cookie exchange, interactive channel, foreign `Host`, new token per start, never logged | passes (5 tests) | **not tested** |
+| Real Electron window (virtual display): page loads, interactive channel answers, clean quit | verified by hand  | **not tested** |
+| Packaged `.tar.xz`: strict run (no network, not root, empty `PATH`), cold and warm start, clean quit | verified by hand | **not built** |
+| Typing a note in the real window                                                       | **not verified** (no keyboard input without a window manager) | **not tested** |
+
+All the automated tests start a real PostgreSQL. Clicking in the window and
+reading its pixels used `xdotool` and a virtual X server; they are a manual
+verification, not part of the test suite.
+
+### What could not be validated
+
+- **Windows x64**, entirely: the `.exe` binaries, building the package (which
+  must happen on Windows), the window, the session token behavior and the
+  packaged application. Issue #2 covers it.
+- **Closing the window with the mouse**, and **typing a note** in the window, in
+  the packaged and unpackaged runs; both need a window manager or a real
+  desktop.
+- **Behavior over time**: no long-running or multi-user test of the web host,
+  and the interactive screens are only covered by their services and by hand,
+  because there is no browser-driven test suite.
+
+### Open risks
+
+- **Orphaned processes** in both directions when one process is killed (see the
+  desktop and packaging findings). A watchdog on one side, or a different
+  single-instance policy, is needed before this is usable by non-technical
+  people.
+- **Electron.NET Core is a 0.x package**, defaults to an unsupported Electron
+  version and has install-time sharp edges (Node version, npm script policy,
+  environment variables). The Electron version has to be pinned and reviewed.
+- **Weight**: 133 MB compressed and about 524 MB unpacked per platform, of which
+  Electron is the largest part.
+- **The web host has no authentication** and must not be exposed as it is.
+- **The session token** does not protect against a process of the same user.
+- **Packages must be built on each target operating system**, so a release
+  needs a Windows build machine in addition to a Linux one.
+
+### Recommendation
+
+The architecture holds: one Blazor Server UI in a Razor Class Library, plain
+`Core` and `Data` libraries, and two thin hosts run the same code in a server
+and in a desktop window, with one PostgreSQL dialect and one migration chain.
+That decision can be considered closed for the proof of concept.
+
+Electron.NET Core is **workable on Linux but not ready to be adopted without
+reservations**. It starts, shows the page, protects the local port with the
+session token, shuts down cleanly and packages into a self-contained archive
+that runs offline. Against that stand the orphan-process behavior, the weight of
+the package, a 0.x package that needs careful pinning, and a Windows build that
+is completely unverified. Before committing to it, validate Windows x64 in CI,
+fix or design around the orphan processes, and compare it with a lighter shell
+such as Photino.Blazor, which this change did not evaluate.
 
 ## Design record
 
