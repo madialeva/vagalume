@@ -25,10 +25,14 @@ public static class SolutionRules
         Rule("Vagalume.Api.Contracts", [], [.. Container, .. Electron, .. Persistence]),
         Rule("Vagalume.Api", ["Vagalume.Core", "Vagalume.Api.Contracts"], [.. Container, .. Electron, .. Persistence], allowFrameworks: true),
         Rule("Vagalume.Api.Client", ["Vagalume.Api.Contracts"], [.. Container, .. Electron, .. Persistence]),
+        Rule(
+            "Vagalume.Wasm.UI",
+            ["Vagalume.Api.Contracts", "Vagalume.Api.Client"],
+            [.. Container, .. Electron, .. Persistence]),
     ];
 
     /// <summary>Projects that must be written in C# only, without Razor syntax.</summary>
-    public static IReadOnlyList<string> RazorFreeProjects { get; } = [];
+    public static IReadOnlyList<string> RazorFreeProjects { get; } = ["Vagalume.Wasm.UI"];
 
     public static IReadOnlyList<string> CheckNoRazorFiles(string sourceDirectory, IEnumerable<string> projects)
     {

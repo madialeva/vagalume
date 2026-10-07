@@ -1,0 +1,16 @@
+<Project Sdk="Microsoft.NET.Sdk.BlazorWebAssembly">
+
+  <PropertyGroup>
+    <OverrideHtmlAssetPlaceholders>true</OverrideHtmlAssetPlaceholders>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Microsoft.AspNetCore.Components.WebAssembly" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\Vagalume.Api.Contracts\Vagalume.Api.Contracts.csproj" />
+    <ProjectReference Include="..\Vagalume.Api.Client\Vagalume.Api.Client.csproj" />
+  </ItemGroup>
+
+</Project>
