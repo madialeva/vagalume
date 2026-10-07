@@ -40,5 +40,5 @@
 
 ## 8. Informe comparativo y documentación
 
-- [ ] 8.1 Añadir al `README.md` el informe de este change: resultado de cada prueba, evaluación del DSL con ejemplos frente a Razor, comparación medida con Blazor Server, lo que no se pudo validar y una recomendación fundada sobre si WASM es viable en escritorio y si merece la pena frente a Blazor Server. Verificación: cada afirmación corresponde a una prueba o a una medición realizada.
-- [ ] 8.2 Actualizar `AGENTS.md` (proyectos nuevos, comandos, reglas de dependencia y estado). Verificación: `dotnet format --verify-no-changes && dotnet build && dotnet test` en verde y los documentos coinciden con el código.
+- [x] 8.1 Añadir al `README.md` el informe de este change: resultado de cada prueba, evaluación del DSL con ejemplos frente a Razor, comparación medida con Blazor Server, lo que no se pudo validar y una recomendación fundada sobre si WASM es viable en escritorio y si merece la pena frente a Blazor Server. Verificación: cada afirmación corresponde a una prueba o a una medición realizada.
+- [x] 8.2 Actualizar `AGENTS.md` (proyectos nuevos, comandos, reglas de dependencia y estado). Verificación: `dotnet format --verify-no-changes && dotnet build && dotnet test` en verde y los documentos coinciden con el código.
