@@ -22,7 +22,7 @@
 
 ## 5. Verificación de Electron.NET Core
 
-- [ ] 5.1 Antes de construir sobre él, verificar en un proyecto desechable (fuera de la solución o descartado después) cómo se comporta `ElectronNET.Core` 0.6.0 con .NET 10: cómo se lanzan .NET y Electron, cómo se abre una ventana con una dirección propia, qué ocurre al cerrar la ventana y al matar cada proceso, cómo se pasa la dirección a la ventana (¿línea de órdenes?) y qué necesita en Linux (*sandbox*, pantalla). Verificación: notas de hallazgos en el informe del README y decisión explícita de continuar o detenerse y pedir indicaciones si no es viable.
+- [x] 5.1 Antes de construir sobre él, verificar en un proyecto desechable (fuera de la solución o descartado después) cómo se comporta `ElectronNET.Core` 0.6.0 con .NET 10: cómo se lanzan .NET y Electron, cómo se abre una ventana con una dirección propia, qué ocurre al cerrar la ventana y al matar cada proceso, cómo se pasa la dirección a la ventana (¿línea de órdenes?) y qué necesita en Linux (*sandbox*, pantalla). Verificación: notas de hallazgos en el informe del README y decisión explícita de continuar o detenerse y pedir indicaciones si no es viable.
 
 ## 6. Host de escritorio
 

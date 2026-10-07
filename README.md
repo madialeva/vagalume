@@ -246,6 +246,50 @@ The distribution also bundles third-party libraries (ICU, OpenSSL, zlib,
 libxml2, libxslt, liblzma) with their own licenses, to be reviewed before
 shipping a product.
 
+## Findings report (Blazor Server skeleton with Electron.NET Core)
+
+### Electron.NET Core behavior (verified with a throwaway project)
+
+Observed with `ElectronNET.Core` 0.6.0, .NET 10, Node.js 24.17, on Linux x64
+under a virtual X server (`xvfb-run`). The project is a pre-1.0 package, so
+all of this may change.
+
+- **How it starts.** Unpackaged (`dotnet run`), .NET starts first and launches
+  Electron as its child process; Electron connects back through a Socket.IO
+  server that listens on `127.0.0.1` with a random port and a random key. In a
+  packaged app the order is expected to be reversed (Electron first); that is
+  checked in the packaging group. ASP.NET Core listens on `127.0.0.1` with a
+  random port chosen by Electron.NET, not by the application.
+- **The window address does not travel on the command line.** Electron's
+  arguments are `main.js -unpackeddotnet --trace-warnings -electronforcedport=0
+  <path to the .NET app>`. The page to load is sent over the IPC socket, so a
+  session token inside the URL is not visible in the process list.
+- **Closing the window shuts everything down cleanly:** `ApplicationStopping`
+  and `ApplicationStopped` fire and no process is left behind. Killing the
+  Electron main process also makes the .NET host stop gracefully.
+- **Killing the .NET process (`kill -9`) leaves Electron running as an
+  orphan** (observed for at least 60 s). Because `ElectronSingleInstance`
+  defaults to `true`, **the next launch of the application exits immediately**
+  while the orphan holds the single-instance lock. This is the main weakness
+  found.
+- **Defaults to watch.** The package defaults to Electron 30.4.0, which is out
+  of support, and its `install.js` silently fails to extract under Node 24
+  (the binary never appears). Setting `ElectronVersion` (44.5.1 was used) fixes
+  it, because newer versions are installed with an explicit step the targets
+  run. The build runs `npm install` and downloads Electron at **build** time
+  only. A user-level npm setting such as `allow-scripts` can block Electron's
+  install script, and an `ELECTRON_RUN_AS_NODE=1` variable in the environment
+  (it is set by some editors) stops Electron from starting as an application.
+- **Packaging rules.** A `Properties/electron-builder.json` is required. The
+  default Linux target is `tar.xz` with `--no-sandbox` as an executable
+  argument, so the Chromium sandbox is off by default. **A target platform
+  must be built on that platform** (a Windows package cannot be built on
+  Linux; the tooling stops with error `ELECTRON100`).
+- **Size.** The unpacked Electron distribution for Linux is about 283 MB.
+
+Conclusion so far: workable and worth continuing, provided the orphan
+behavior is handled and the Electron version is pinned explicitly.
+
 ## Design record
 
 The design of every change (proposal, design, specifications and tasks) is kept
