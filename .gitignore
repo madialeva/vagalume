@@ -17,3 +17,6 @@ obj/
 
 # PostgreSQL binaries downloaded at build time (see eng/)
 artifacts/
+
+# Private design notes (kept local, not published)
+docs/decisiones-de-plataforma.md
