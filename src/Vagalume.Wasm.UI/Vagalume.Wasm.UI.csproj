@@ -1,7 +1,8 @@
 <Project Sdk="Microsoft.NET.Sdk.BlazorWebAssembly">
 
   <PropertyGroup>
-    <OverrideHtmlAssetPlaceholders>true</OverrideHtmlAssetPlaceholders>
+    <!-- The host copies index.html as it is, so it must not contain fingerprint placeholders. -->
+    <WasmFingerprintAssets>false</WasmFingerprintAssets>
   </PropertyGroup>
 
   <ItemGroup>

@@ -34,9 +34,9 @@
 
 ## 7. Empaquetado y medidas
 
-- [ ] 7.1 Configurar el empaquetado para `linux-x64` del host WASM con solo los binarios de PostgreSQL de Linux y los ficheros del WASM publicados. Verificación: el comando documentado genera el paquete y su contenido incluye los binarios de Linux, los ficheros de `_framework` y ningún ensamblado de `Core`/`Data` en el cliente.
-- [ ] 7.2 Verificar el paquete en modo estricto (sin red, sin root, `PATH` sin `dotnet` ni `node`): primer arranque, interfaz WASM operativa y cierre limpio. Verificación: resultado registrado.
-- [ ] 7.3 Medir lo definido en D8 y compararlo con las cifras de Blazor Server de `is6`. Verificación: cifras registradas en el informe.
+- [x] 7.1 Configurar el empaquetado para `linux-x64` del host WASM con solo los binarios de PostgreSQL de Linux y los ficheros del WASM publicados. Verificación: el comando documentado genera el paquete y su contenido incluye los binarios de Linux, los ficheros de `_framework` y ningún ensamblado de `Core`/`Data` en el cliente.
+- [x] 7.2 Verificar el paquete en modo estricto (sin red, sin root, `PATH` sin `dotnet` ni `node`): primer arranque, interfaz WASM operativa y cierre limpio. Verificación: resultado registrado.
+- [x] 7.3 Medir lo definido en D8 y compararlo con las cifras de Blazor Server de `is6`. Verificación: cifras registradas en el informe.
 
 ## 8. Informe comparativo y documentación
 

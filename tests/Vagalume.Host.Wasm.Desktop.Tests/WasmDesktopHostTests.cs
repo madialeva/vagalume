@@ -1,6 +1,5 @@
 using System.Net;
 using System.Net.Http.Json;
-using System.Text.RegularExpressions;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using Vagalume.Api.Client;
@@ -14,7 +13,7 @@ using Vagalume.Testing;
 namespace Vagalume.Host.Wasm.Desktop.Tests;
 
 [Trait("Category", "Integration")]
-public sealed partial class WasmDesktopHostTests
+public sealed class WasmDesktopHostTests
 {
     private static readonly CancellationToken Ct = CancellationToken.None;
 
@@ -45,8 +44,9 @@ public sealed partial class WasmDesktopHostTests
 
         var html = await window.GetStringAsync("/", Ct);
         Assert.Contains("<div id=\"app\">", html, StringComparison.Ordinal);
-        var script = FingerprintedScript().Match(html).Value;
-        Assert.NotEmpty(script);
+        Assert.Contains("_framework/blazor.webassembly.js", html, StringComparison.Ordinal);
+        Assert.DoesNotContain("#[", html, StringComparison.Ordinal);
+        const string script = "/_framework/blazor.webassembly.js";
 
         var boot = await window.GetAsync(script, Ct);
         Assert.Equal(HttpStatusCode.OK, boot.StatusCode);
@@ -142,6 +142,4 @@ public sealed partial class WasmDesktopHostTests
         Assert.DoesNotContain(logs.Messages, m => m.Contains(desktop.App.Token.Value, StringComparison.Ordinal));
     }
 
-    [GeneratedRegex(@"_framework/blazor\.webassembly\.[^""]+\.js")]
-    private static partial Regex FingerprintedScript();
 }
