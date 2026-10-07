@@ -32,4 +32,14 @@
           SkipUnchangedFiles="true" />
   </Target>
 
+  <!-- A published package carries the PostgreSQL distribution of its own platform, and only that one. -->
+  <Target Name="AddPostgresBinariesToPublish" BeforeTargets="ComputeResolvedFilesToPublishList" DependsOnTargets="FetchPostgresBinaries">
+    <ItemGroup>
+      <PostgresPublishFiles Include="$(RepoRoot)artifacts/postgres/$(PostgresPlatform)/**/*" Exclude="$(RepoRoot)artifacts/postgres/$(PostgresPlatform)/.fetched" />
+      <ResolvedFileToPublish Include="@(PostgresPublishFiles)"
+                             RelativePath="postgres/%(RecursiveDir)%(Filename)%(Extension)"
+                             CopyToPublishDirectory="PreserveNewest" />
+    </ItemGroup>
+  </Target>
+
 </Project>

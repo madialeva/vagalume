@@ -133,6 +133,24 @@ The local port is protected: every start generates a random token, the window
 exchanges it for an `HttpOnly` cookie, and any other request gets `403`. The
 token is kept out of the logs.
 
+#### Packaging the desktop application
+
+A package must be built on its own platform (Electron.NET Core refuses to
+cross-build). On Linux x64:
+
+```bash
+dotnet publish src/Vagalume.Host.Desktop -c Release -r linux-x64 --self-contained
+```
+
+The result is `src/Vagalume.Host.Desktop/bin/Release/net10.0/linux-x64/publish/vagalume-host-desktop-x64-0.1.0.tar.xz`
+(about 133 MB; the unpacked application is about 524 MB). It contains Electron,
+the self-contained .NET application and, under `resources/bin/postgres`, only
+the PostgreSQL distribution of that platform. Extract it anywhere and run
+`Vagalume.Host.Desktop`; it needs no .NET, no Node.js and no network.
+
+On Windows x64 the same command with `-r win-x64` is expected to produce a
+portable executable, but **it has not been built or run** (see the findings).
+
 PostgreSQL refuses to run as `root`; the host fails early with a clear error.
 
 ## Findings report (embedded PostgreSQL spike)
@@ -337,6 +355,39 @@ all of this may change.
 - **Copying the PostgreSQL distribution into the build output follows
   symbolic links**, so the copy takes about 123 MB instead of the 60 MB of the
   extracted archive.
+
+### Packaging findings (Linux x64)
+
+- **Launch order changes when packaged.** Unpackaged, .NET starts Electron;
+  in the package **Electron starts the .NET application** (`PackagedElectronFirst`).
+- **Strict run of the package.** Extracted from the `.tar.xz` and run as a
+  regular user, with no network (a network namespace with only loopback) and an
+  empty `PATH` (no `dotnet`, no `node`): it creates its cluster, shows the notes
+  page and, when asked to quit, leaves no host, Electron or PostgreSQL process
+  and removes `postmaster.pid`.
+- **Start-up times** (virtual display, local SSD): cold start, which runs
+  `initdb`, has PostgreSQL up after about 1.1 s and the window drawn after about
+  3.3 s; a warm start takes about 0.55 s and 1.9 s.
+- **Forced kill in the package.** Killing the .NET host leaves Electron and
+  PostgreSQL running; launching the application again does not start a new
+  host (Electron's single-instance lock is held) and, once the orphaned Electron
+  is gone, PostgreSQL is still running. Killing Electron leaves the host running.
+  The orphan problem exists in both directions and in both launch modes.
+- **Electron terminated by `SIGTERM` aborted with `SIGTRAP`** (a core dump) in the
+  strict run, although every other process was cleaned up. Closing the window
+  with the mouse could not be automated without a window manager, so the normal
+  close path was checked by quitting the application, not by clicking the close
+  button.
+- **The default `--no-sandbox` argument** of the Linux target in
+  `electron-builder.json` only applies to packages that use a launcher script
+  (AppImage, deb); the `tar.xz` runs the Electron binary directly and relied on
+  unprivileged user namespaces for Chromium's sandbox on this machine.
+- **Windows x64 is not built.** `dotnet publish -r win-x64` on Linux stops with
+  `ELECTRON100`. The Windows target (`portable`, x64) is configured, and the
+  build picks the PostgreSQL distribution from the operating system it runs on,
+  so a Windows build would carry the Windows binaries, but none of this has run.
+- **The PostgreSQL copy is larger than the archive** (about 123 MB in the
+  package) because symbolic links in the Linux distribution are copied as files.
 
 Conclusion so far: workable and worth continuing, provided the orphan
 behavior is handled and the Electron version is pinned explicitly.

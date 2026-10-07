@@ -34,10 +34,10 @@
 
 ## 7. Empaquetado
 
-- [ ] 7.1 Configurar el empaquetado de Electron.NET Core para `linux-x64`, que copie dentro del paquete solo `artifacts/postgres/linux-amd64/` y haga que la aplicación localice los binarios relativos a su propio directorio. Verificación: el paquete se genera con un comando documentado y su contenido incluye los binarios de Linux y ninguno de Windows.
-- [ ] 7.2 Verificar el paquete de Linux: ejecutarlo sin .NET ni Node.js en el `PATH` y sin red (por ejemplo con un espacio de red sin interfaces externas, como en el change anterior), comprobando primer arranque, página de notas y cierre limpio. Verificación: resultado registrado; si no hay pantalla, comprobación manual del usuario con el método anotado.
-- [ ] 7.3 Configurar el empaquetado de `win-x64` con solo `artifacts/postgres/windows-amd64/`, y generarlo si la herramienta permite compilarlo desde Linux. Verificación: el paquete se genera y su contenido solo lleva los binarios de Windows, o queda documentado por qué no se pudo generar; en ambos casos se marca como **sin validar** (issue #2).
-- [ ] 7.4 Medir tamaño de cada paquete y tiempos de arranque en frío y en caliente de la aplicación empaquetada para el informe. Verificación: cifras registradas en el informe.
+- [x] 7.1 Configurar el empaquetado de Electron.NET Core para `linux-x64`, que copie dentro del paquete solo `artifacts/postgres/linux-amd64/` y haga que la aplicación localice los binarios relativos a su propio directorio. Verificación: el paquete se genera con un comando documentado y su contenido incluye los binarios de Linux y ninguno de Windows.
+- [x] 7.2 Verificar el paquete de Linux: ejecutarlo sin .NET ni Node.js en el `PATH` y sin red (por ejemplo con un espacio de red sin interfaces externas, como en el change anterior), comprobando primer arranque, página de notas y cierre limpio. Verificación: resultado registrado; si no hay pantalla, comprobación manual del usuario con el método anotado.
+- [x] 7.3 Configurar el empaquetado de `win-x64` con solo `artifacts/postgres/windows-amd64/`, y generarlo si la herramienta permite compilarlo desde Linux. Verificación: el paquete se genera y su contenido solo lleva los binarios de Windows, o queda documentado por qué no se pudo generar; en ambos casos se marca como **sin validar** (issue #2).
+- [x] 7.4 Medir tamaño de cada paquete y tiempos de arranque en frío y en caliente de la aplicación empaquetada para el informe. Verificación: cifras registradas en el informe.
 
 ## 8. Informe de hallazgos y documentación
 
