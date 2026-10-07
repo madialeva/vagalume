@@ -31,6 +31,9 @@ the GitHub issues and in the README.
   authentication.
 - Do not add new NuGet packages (runtime or test) without an approved OpenSpec
   change.
+- NuGet versions are managed centrally in `Directory.Packages.props`
+  (Central Package Management): `PackageReference` items in projects carry no
+  `Version`.
 - Do not commit PostgreSQL binaries or any downloaded artifact.
 
 ## Commands
