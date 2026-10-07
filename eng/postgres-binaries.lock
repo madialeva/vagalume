@@ -1,0 +1,5 @@
+# Pinned PostgreSQL binaries (Zonky embedded-postgres-binaries on Maven Central).
+# Format: platform<TAB>version<TAB>sha256<TAB>url
+# Changing a version or a hash is an explicit, reviewable act.
+linux-amd64	18.6.0	008ee189eaa7ca2b58bd01dd950291e638b998392cf982297acd4779ec898ac1	https://repo1.maven.org/maven2/io/zonky/test/postgres/embedded-postgres-binaries-linux-amd64/18.6.0/embedded-postgres-binaries-linux-amd64-18.6.0.jar
+windows-amd64	18.6.0	b7ef2d03588e0439f0d0a2250f43905f7464f1e96ace47703ceaf79094198150	https://repo1.maven.org/maven2/io/zonky/test/postgres/embedded-postgres-binaries-windows-amd64/18.6.0/embedded-postgres-binaries-windows-amd64-18.6.0.jar

@@ -1,0 +1,8 @@
+<Solution>
+  <Folder Name="/src/">
+    <Project Path="src/Vagalume.Postgres.Embedded/Vagalume.Postgres.Embedded.csproj" />
+  </Folder>
+  <Folder Name="/tests/">
+    <Project Path="tests/Vagalume.Postgres.Embedded.Tests/Vagalume.Postgres.Embedded.Tests.csproj" />
+  </Folder>
+</Solution>

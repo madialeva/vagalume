@@ -1,0 +1,31 @@
+schema: spec-driven
+
+# Project context (optional)
+# This is shown to AI when creating artifacts.
+context: |
+  Vagalume es una prueba de concepto (nacida del producto Arume, de facturación y contabilidad) para ejecutar una misma aplicación .NET en dos modos: escritorio autónomo y servicio web alojado por una empresa.
+  Tech stack: .NET 10, C#, xUnit, Npgsql, PostgreSQL embebido (binarios de Zonky para Linux x64 y Windows x64).
+  Idioma: código, identificadores, comentarios, commits e issues en inglés; prosa de los artefactos OpenSpec en español.
+  openspec/ es público: los artefactos deben ser autocontenidos.
+
+# Per-artifact rules (optional)
+# Add custom rules for specific artifacts.
+# Example:
+#   rules:
+#     proposal:
+#       - Keep proposals under 500 words
+#       - Always include a "Non-goals" section
+#     tasks:
+#       - Break tasks into chunks of max 2 hours
+
+# Per-operation guidance (optional)
+# Add advisory guidance for how apply and archive work should be conducted.
+# This is separate from artifact rules above.
+# Example:
+#   operations:
+#     apply:
+#       guidance:
+#         - Keep test summaries concise
+#     archive:
+#       guidance:
+#         - Summarize the archive outcome before finishing

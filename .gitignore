@@ -1,0 +1,19 @@
+*.local
+.DS_Store
+
+# Visual Studio Code
+.vscode
+
+# AI folders and files
+.opencode
+.claude
+
+# Temporal folder
+tmp/
+
+# Build output
+bin/
+obj/
+
+# PostgreSQL binaries downloaded at build time (see eng/)
+artifacts/
