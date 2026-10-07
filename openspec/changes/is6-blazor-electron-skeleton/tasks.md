@@ -16,9 +16,9 @@
 
 ## 4. Host web
 
-- [ ] 4.1 Implementar `Host.Web`: raíz de composición, lectura de la cadena de conexión de la configuración con error claro si falta o no conecta, aplicación de migraciones al arrancar y servicio de la interfaz de `UI`. Verificación: arrancar contra un PostgreSQL de prueba y comprobar que la página de notas responde; sin cadena de conexión el proceso termina con el mensaje esperado.
-- [ ] 4.2 Pruebas del host web con `WebApplicationFactory` contra un PostgreSQL real: arranque válido, falta de cadena de conexión, base de datos inalcanzable y dos sesiones simultáneas sobre los mismos datos. Verificación: las pruebas pasan y cubren los escenarios de `web-host`.
-- [ ] 4.3 Documentar en `README.md` cómo ejecutar el host web contra un PostgreSQL externo (incluida la clave de configuración) y la advertencia de que no autentica y no debe exponerse a internet. Verificación: seguir las instrucciones del README en limpio arranca el host web.
+- [x] 4.1 Implementar `Host.Web`: raíz de composición, lectura de la cadena de conexión de la configuración con error claro si falta o no conecta, aplicación de migraciones al arrancar y servicio de la interfaz de `UI`. Verificación: arrancar contra un PostgreSQL de prueba y comprobar que la página de notas responde; sin cadena de conexión el proceso termina con el mensaje esperado.
+- [x] 4.2 Pruebas del host web con `WebApplicationFactory` contra un PostgreSQL real: arranque válido, falta de cadena de conexión, base de datos inalcanzable y dos sesiones simultáneas sobre los mismos datos. Verificación: las pruebas pasan y cubren los escenarios de `web-host`.
+- [x] 4.3 Documentar en `README.md` cómo ejecutar el host web contra un PostgreSQL externo (incluida la clave de configuración) y la advertencia de que no autentica y no debe exponerse a internet. Verificación: seguir las instrucciones del README en limpio arranca el host web.
 
 ## 5. Verificación de Electron.NET Core
 

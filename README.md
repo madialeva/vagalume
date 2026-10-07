@@ -92,6 +92,26 @@ await using var connection = new NpgsqlConnection(host.ConnectionString);
 await host.StopAsync(cancellationToken);
 ```
 
+### Web host
+
+`Vagalume.Host.Web` serves the shared Blazor Server UI and talks to an
+**external** PostgreSQL; it never starts an embedded one. The connection string
+comes from the configuration key `ConnectionStrings:Vagalume`, for example with
+an environment variable:
+
+```bash
+ConnectionStrings__Vagalume="Host=db;Port=5432;Username=vagalume;Password=...;Database=vagalume" \
+ASPNETCORE_URLS=http://127.0.0.1:5021 \
+dotnet run --project src/Vagalume.Host.Web
+```
+
+The host applies the database migrations on startup. Without the key it exits
+with a message naming it; if the database cannot be reached it exits saying so.
+
+> **The web host has no authentication yet.** Anyone who can reach it can read
+> and change the data, so do not expose it to the internet as it is. Users and
+> roles are tracked as a separate issue.
+
 PostgreSQL refuses to run as `root`; the host fails early with a clear error.
 
 ## Findings report (embedded PostgreSQL spike)
