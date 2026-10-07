@@ -14,6 +14,7 @@
   <ItemGroup>
     <Using Include="Xunit" />
     <ProjectReference Include="..\..\src\Vagalume.Postgres.Embedded\Vagalume.Postgres.Embedded.csproj" />
+    <ProjectReference Include="..\Vagalume.Testing\Vagalume.Testing.csproj" />
   </ItemGroup>
 
   <PropertyGroup>

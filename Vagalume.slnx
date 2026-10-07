@@ -1,8 +1,15 @@
 <Solution>
   <Folder Name="/src/">
+    <Project Path="src/Vagalume.Core/Vagalume.Core.csproj" />
+    <Project Path="src/Vagalume.Data/Vagalume.Data.csproj" />
+    <Project Path="src/Vagalume.Host.Desktop/Vagalume.Host.Desktop.csproj" />
+    <Project Path="src/Vagalume.Host.Web/Vagalume.Host.Web.csproj" />
     <Project Path="src/Vagalume.Postgres.Embedded/Vagalume.Postgres.Embedded.csproj" />
+    <Project Path="src/Vagalume.UI/Vagalume.UI.csproj" />
   </Folder>
   <Folder Name="/tests/">
+    <Project Path="tests/Vagalume.Architecture.Tests/Vagalume.Architecture.Tests.csproj" />
     <Project Path="tests/Vagalume.Postgres.Embedded.Tests/Vagalume.Postgres.Embedded.Tests.csproj" />
+    <Project Path="tests/Vagalume.Testing/Vagalume.Testing.csproj" />
   </Folder>
 </Solution>

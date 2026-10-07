@@ -1,0 +1,10 @@
+<Project Sdk="Microsoft.NET.Sdk.Web">
+
+  <ItemGroup>
+    <ProjectReference Include="..\Vagalume.Core\Vagalume.Core.csproj" />
+    <ProjectReference Include="..\Vagalume.Data\Vagalume.Data.csproj" />
+    <ProjectReference Include="..\Vagalume.UI\Vagalume.UI.csproj" />
+    <ProjectReference Include="..\Vagalume.Postgres.Embedded\Vagalume.Postgres.Embedded.csproj" />
+  </ItemGroup>
+
+</Project>

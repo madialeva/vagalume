@@ -1,4 +1,5 @@
 using Vagalume.Postgres.Embedded;
+using Vagalume.Testing;
 
 namespace Vagalume.Postgres.Embedded.Tests.Integration;
 

@@ -4,6 +4,7 @@ using System.Net.NetworkInformation;
 using System.Net.Sockets;
 using Npgsql;
 using Vagalume.Postgres.Embedded;
+using Vagalume.Testing;
 using Xunit.Abstractions;
 
 namespace Vagalume.Postgres.Embedded.Tests.Integration;

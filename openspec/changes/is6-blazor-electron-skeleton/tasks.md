@@ -1,8 +1,8 @@
 ## 1. Solución, proyectos de apoyo y prueba de arquitectura
 
-- [ ] 1.1 Crear los proyectos `Vagalume.Core`, `Vagalume.Data`, `Vagalume.UI` (Razor Class Library), `Vagalume.Host.Web` y `Vagalume.Host.Desktop` bajo `src/`, añadirlos a `Vagalume.slnx` con solo las referencias de proyecto permitidas por D2. Verificación: `dotnet build` pasa sin advertencias.
-- [ ] 1.2 Extraer `TestEnvironment` y `TestCluster` de `Vagalume.Postgres.Embedded.Tests` a un proyecto de apoyo `tests/Vagalume.Testing` y hacer que las pruebas existentes lo usen. Verificación: `dotnet test` mantiene las 16 pruebas del change anterior en verde.
-- [ ] 1.3 Escribir la prueba de arquitectura que lee los `.csproj` y comprueba las reglas de dependencia de las capas (referencias de proyecto y de paquete), con un caso que demuestre que una referencia prohibida hace fallar la prueba y nombra la referencia. Verificación: la prueba pasa con la solución real y falla con un `.csproj` de ejemplo que viole una regla.
+- [x] 1.1 Crear los proyectos `Vagalume.Core`, `Vagalume.Data`, `Vagalume.UI` (Razor Class Library), `Vagalume.Host.Web` y `Vagalume.Host.Desktop` bajo `src/`, añadirlos a `Vagalume.slnx` con solo las referencias de proyecto permitidas por D2. Verificación: `dotnet build` pasa sin advertencias.
+- [x] 1.2 Extraer `TestEnvironment` y `TestCluster` de `Vagalume.Postgres.Embedded.Tests` a un proyecto de apoyo `tests/Vagalume.Testing` y hacer que las pruebas existentes lo usen. Verificación: `dotnet test` mantiene las 16 pruebas del change anterior en verde.
+- [x] 1.3 Escribir la prueba de arquitectura que lee los `.csproj` y comprueba las reglas de dependencia de las capas (referencias de proyecto y de paquete), con un caso que demuestre que una referencia prohibida hace fallar la prueba y nombra la referencia. Verificación: la prueba pasa con la solución real y falla con un `.csproj` de ejemplo que viole una regla.
 
 ## 2. Core y Data
 
