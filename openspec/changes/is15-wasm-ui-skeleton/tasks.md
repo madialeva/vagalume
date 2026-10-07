@@ -5,9 +5,9 @@
 
 ## 2. Contratos y API REST
 
-- [ ] 2.1 Implementar en `Api.Contracts` los DTOs, las constantes de ruta, `INotesApi` y las excepciones de cliente, con la versión como texto opaco. Verificación: `dotnet build` y la prueba de arquitectura confirman que el proyecto no depende de nada.
-- [ ] 2.2 Implementar en `Api` `MapNotesApi` con listar, crear y modificar sobre `NoteService`, y la traducción de errores a 400 `ProblemDetails`, 404 y 409 sin detalles internos. Verificación: `dotnet build` pasa.
-- [ ] 2.3 Pruebas de la API con servidor real y PostgreSQL real: crear y listar, modificar con la versión leída, texto vacío (400), nota inexistente (404), conflicto con dos lecturas (409) y que ninguna respuesta de error contiene trazas, nombres de tipos internos ni texto de la base de datos. Verificación: las pruebas pasan y cubren los escenarios de `notes-api`.
+- [x] 2.1 Implementar en `Api.Contracts` los DTOs, las constantes de ruta, `INotesApi` y las excepciones de cliente, con la versión como texto opaco. Verificación: `dotnet build` y la prueba de arquitectura confirman que el proyecto no depende de nada.
+- [x] 2.2 Implementar en `Api` `MapNotesApi` con listar, crear y modificar sobre `NoteService`, y la traducción de errores a 400 `ProblemDetails`, 404 y 409 sin detalles internos. Verificación: `dotnet build` pasa.
+- [x] 2.3 Pruebas de la API con servidor real y PostgreSQL real: crear y listar, modificar con la versión leída, texto vacío (400), nota inexistente (404), conflicto con dos lecturas (409) y que ninguna respuesta de error contiene trazas, nombres de tipos internos ni texto de la base de datos. Verificación: las pruebas pasan y cubren los escenarios de `notes-api`.
 
 ## 3. Cliente HTTP
 
