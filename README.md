@@ -40,7 +40,7 @@ Work is tracked as GitHub issues. The table shows what is planned.
 
 | Status | Feature                                                                                                           | Target | Issue |
 | :----: | ----------------------------------------------------------------------------------------------------------------- | :----: | :---: |
-|   ⬜   | Embedded PostgreSQL host: pinned and verified binaries, restricted access, crash recovery, backup and restore     | v0.1.0 |  #1   |
+|   ✅   | Embedded PostgreSQL host: pinned and verified binaries, restricted access, crash recovery, backup and restore     | v0.1.0 |  #1   |
 
 Other directions are under evaluation but not decided: Blazor Server as the UI
 shared by both modes, Electron.NET or Photino as desktop shell, and EF Core
