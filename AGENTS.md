@@ -244,10 +244,10 @@ Each OpenSpec change is tracked on GitHub with this cycle:
 
 - **Phase:** proof of concept.
 - **Archived changes:** `is1-embedded-postgres-spike` (embedded PostgreSQL host;
-  file-level backups because the minimal package has no `pg_dump`/`pg_restore`).
-- **Active change:** `is6-blazor-electron-skeleton`: implemented and validated on
-  Linux x64, waiting for the user's review and archive. Windows x64 is not
-  validated and the orphan-process behavior of Electron.NET Core is an open risk
-  (see the findings report in `README.md`).
-- **Repository state:** the default branch is `develop/v0.1.0`; the change work
-  lives on `change/is6-blazor-electron-skeleton`.
+  file-level backups because the minimal package has no `pg_dump`/`pg_restore`)
+  and `is6-blazor-electron-skeleton` (Blazor Server skeleton with web and
+  Electron.NET desktop hosts; validated on Linux x64, Windows x64 not validated,
+  orphan processes in Electron.NET Core are an open risk: see the findings
+  report in `README.md`).
+- **Active change:** none.
+- **Repository state:** the default branch is `develop/v0.1.0`.
