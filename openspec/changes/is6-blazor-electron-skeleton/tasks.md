@@ -6,9 +6,9 @@
 
 ## 2. Core y Data
 
-- [ ] 2.1 Implementar en `Core` la entidad `Note`, la interfaz de repositorio y el servicio de casos de uso (crear con validación de texto no vacío, listar, modificar con comprobación de versión), con el error de dominio de conflicto de concurrencia. Verificación: pruebas unitarias de validación, orden de listado y conflicto, con un repositorio en memoria de prueba.
-- [ ] 2.2 Añadir a `Data` el `DbContext` con el modelo de `Note`, el `xmin` como token de concurrencia y la implementación del repositorio con EF Core y Npgsql; fijar `dotnet-ef` en un manifiesto de herramientas local y crear la migración inicial. Verificación: `dotnet ef migrations list` muestra la migración y `dotnet build` pasa.
-- [ ] 2.3 Pruebas de integración de `Data` contra un PostgreSQL real (`Vagalume.Testing`): migrar una base vacía, crear y listar notas, persistencia al reiniciar el servidor, arranque repetido sin cambios y conflicto de `xmin` con dos contextos. Verificación: las pruebas pasan y cubren los escenarios de `sample-notes`.
+- [x] 2.1 Implementar en `Core` la entidad `Note`, la interfaz de repositorio y el servicio de casos de uso (crear con validación de texto no vacío, listar, modificar con comprobación de versión), con el error de dominio de conflicto de concurrencia. Verificación: pruebas unitarias de validación, orden de listado y conflicto, con un repositorio en memoria de prueba.
+- [x] 2.2 Añadir a `Data` el `DbContext` con el modelo de `Note`, el `xmin` como token de concurrencia y la implementación del repositorio con EF Core y Npgsql; fijar `dotnet-ef` en un manifiesto de herramientas local y crear la migración inicial. Verificación: `dotnet ef migrations list` muestra la migración y `dotnet build` pasa.
+- [x] 2.3 Pruebas de integración de `Data` contra un PostgreSQL real (`Vagalume.Testing`): migrar una base vacía, crear y listar notas, persistencia al reiniciar el servidor, arranque repetido sin cambios y conflicto de `xmin` con dos contextos. Verificación: las pruebas pasan y cubren los escenarios de `sample-notes`.
 
 ## 3. Interfaz compartida
 

@@ -9,6 +9,8 @@
   </Folder>
   <Folder Name="/tests/">
     <Project Path="tests/Vagalume.Architecture.Tests/Vagalume.Architecture.Tests.csproj" />
+    <Project Path="tests/Vagalume.Core.Tests/Vagalume.Core.Tests.csproj" />
+    <Project Path="tests/Vagalume.Data.Tests/Vagalume.Data.Tests.csproj" />
     <Project Path="tests/Vagalume.Postgres.Embedded.Tests/Vagalume.Postgres.Embedded.Tests.csproj" />
     <Project Path="tests/Vagalume.Testing/Vagalume.Testing.csproj" />
   </Folder>

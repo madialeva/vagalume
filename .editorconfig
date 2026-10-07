@@ -28,3 +28,6 @@ dotnet_diagnostic.IDE0044.severity = warning
 [tests/**.cs]
 dotnet_diagnostic.CA1707.severity = none
 dotnet_diagnostic.CA1305.severity = none
+
+[**/Migrations/*.cs]
+generated_code = true
