@@ -23,6 +23,11 @@ public static class SolutionRules
             [],
             allowFrameworks: true),
         Rule(
+            "Vagalume.Host.Wasm.Desktop",
+            ["Vagalume.Core", "Vagalume.Data", "Vagalume.Api", "Vagalume.Wasm.UI", "Vagalume.Postgres.Embedded", "Vagalume.Desktop.Hosting"],
+            [],
+            allowFrameworks: true),
+        Rule(
             "Vagalume.Desktop.Hosting",
             ["Vagalume.Data", "Vagalume.Postgres.Embedded"],
             [.. Container, .. Electron],

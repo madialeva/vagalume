@@ -1,9 +1,6 @@
 <Project Sdk="Microsoft.NET.Sdk.Web">
 
   <PropertyGroup>
-    <!-- The Razor components live in Vagalume.UI, so the Web SDK does not detect them in this project and would
-         leave out the Blazor client script (_framework/blazor.web.js). -->
-    <RequiresAspNetWebAssets>true</RequiresAspNetWebAssets>
     <!-- Electron.NET Core defaults to Electron 30.4.0, which is out of support and does not install under Node 24. -->
     <ElectronVersion>44.5.1</ElectronVersion>
   </PropertyGroup>
@@ -11,12 +8,14 @@
   <ItemGroup>
     <PackageReference Include="ElectronNET.Core" />
     <PackageReference Include="ElectronNET.Core.AspNet" />
+    <PackageReference Include="Microsoft.AspNetCore.Components.WebAssembly.Server" />
   </ItemGroup>
 
   <ItemGroup>
     <ProjectReference Include="..\Vagalume.Core\Vagalume.Core.csproj" />
     <ProjectReference Include="..\Vagalume.Data\Vagalume.Data.csproj" />
-    <ProjectReference Include="..\Vagalume.UI\Vagalume.UI.csproj" />
+    <ProjectReference Include="..\Vagalume.Api\Vagalume.Api.csproj" />
+    <ProjectReference Include="..\Vagalume.Wasm.UI\Vagalume.Wasm.UI.csproj" />
     <ProjectReference Include="..\Vagalume.Postgres.Embedded\Vagalume.Postgres.Embedded.csproj" />
     <ProjectReference Include="..\Vagalume.Desktop.Hosting\Vagalume.Desktop.Hosting.csproj" />
   </ItemGroup>

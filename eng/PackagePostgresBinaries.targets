@@ -1,0 +1,25 @@
+<Project>
+
+  <Import Project="$(MSBuildThisFileDirectory)FetchPostgresBinaries.targets" />
+
+  <!-- The PostgreSQL distribution of this platform travels in a "postgres" directory next to the executable. -->
+  <Target Name="CopyPostgresBinaries" AfterTargets="CopyFilesToOutputDirectory">
+    <ItemGroup>
+      <PostgresFiles Include="$(RepoRoot)artifacts/postgres/$(PostgresPlatform)/**/*" Exclude="$(RepoRoot)artifacts/postgres/$(PostgresPlatform)/.fetched" />
+    </ItemGroup>
+    <Copy SourceFiles="@(PostgresFiles)"
+          DestinationFiles="@(PostgresFiles->'$(OutDir)postgres/%(RecursiveDir)%(Filename)%(Extension)')"
+          SkipUnchangedFiles="true" />
+  </Target>
+
+  <!-- A published package carries the PostgreSQL distribution of its own platform, and only that one. -->
+  <Target Name="AddPostgresBinariesToPublish" BeforeTargets="ComputeResolvedFilesToPublishList" DependsOnTargets="FetchPostgresBinaries">
+    <ItemGroup>
+      <PostgresPublishFiles Include="$(RepoRoot)artifacts/postgres/$(PostgresPlatform)/**/*" Exclude="$(RepoRoot)artifacts/postgres/$(PostgresPlatform)/.fetched" />
+      <ResolvedFileToPublish Include="@(PostgresPublishFiles)"
+                             RelativePath="postgres/%(RecursiveDir)%(Filename)%(Extension)"
+                             CopyToPublishDirectory="PreserveNewest" />
+    </ItemGroup>
+  </Target>
+
+</Project>
