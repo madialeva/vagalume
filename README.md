@@ -157,6 +157,31 @@ portable executable, but **it has not been built or run** (see the findings).
 
 PostgreSQL refuses to run as `root`; the host fails early with a clear error.
 
+### WebAssembly alternative
+
+A second UI architecture lives next to the Blazor Server one: the interface runs
+as **Blazor WebAssembly**, is written in C# with **no Razor** (components are
+classes that return a tree built with a small markup DSL), and talks to the
+server only through a **REST API**, so it never sees the database.
+
+| Path                                   | Contents                                                              |
+| -------------------------------------- | --------------------------------------------------------------------- |
+| `src/Vagalume.Api.Contracts`           | DTOs, routes, `INotesApi` and the client-side exceptions; depends on nothing |
+| `src/Vagalume.Api`                     | Minimal APIs over `Core`, errors as `ProblemDetails`                  |
+| `src/Vagalume.Api.Client`              | `HttpClient` implementation of `INotesApi`                            |
+| `src/Vagalume.Wasm.UI`                 | The WebAssembly UI and its markup DSL (no `.razor` files)             |
+| `src/Vagalume.Desktop.Hosting`         | Session token, local-port guard and PostgreSQL start/stop shared by both desktop hosts |
+| `src/Vagalume.Host.Wasm.Desktop`       | Electron window serving the WASM app and the API from one local origin |
+
+```bash
+dotnet run --project src/Vagalume.Host.Wasm.Desktop
+```
+
+It needs the same prerequisites as the other desktop host (Node.js 22 or later
+and a display). The first request of the window carries the session token, which
+is exchanged for a cookie; that cookie then also accompanies the download of the
+WebAssembly files and every API call, because everything shares one origin.
+
 ## Findings report (embedded PostgreSQL spike)
 
 Results of the first change, measured with PostgreSQL **18.6.0** (Zonky

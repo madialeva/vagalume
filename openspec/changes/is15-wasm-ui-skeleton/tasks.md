@@ -27,10 +27,10 @@
 
 ## 6. Host de escritorio WASM
 
-- [ ] 6.1 Implementar la clase del servidor web de `Host.Wasm.Desktop` sin Electron: guardia de sesión, ficheros estáticos del WASM con `index.html` por defecto, `MapNotesApi`, PostgreSQL embebido, migraciones, rechazo de `root` y parada ordenada. Verificación: pruebas con servidor real: sin sesión todo da 403 sin contenido, con sesión se sirven `index.html` y los ficheros de arranque, la API responde con la cookie de sesión, las notas persisten entre arranques, se rechaza `root` y la parada deja sin servidor PostgreSQL.
-- [ ] 6.2 Integrar Electron.NET Core en el `Program` del host WASM (ventana con la dirección que lleva el token, parada de servidor y base de datos al cerrar) reutilizando el patrón de `is6`. Verificación: arrancar con `dotnet run` abre la ventana.
-- [ ] 6.3 Verificar en la ventana real (X virtual): el WASM carga con la cookie de sesión (comprobando la incógnita de D5), la lista aparece obtenida de la API y un clic en añadir con el texto vacío muestra el mensaje de validación del servidor; al cerrar no queda ningún proceso. Verificación: capturas y resultado registrados para el informe, con el plan alternativo de D5 aplicado solo si hizo falta.
-- [ ] 6.4 Documentar en `README.md` cómo ejecutar el host de escritorio WASM. Verificación: seguir las instrucciones en limpio abre la ventana.
+- [x] 6.1 Implementar la clase del servidor web de `Host.Wasm.Desktop` sin Electron: guardia de sesión, ficheros estáticos del WASM con `index.html` por defecto, `MapNotesApi`, PostgreSQL embebido, migraciones, rechazo de `root` y parada ordenada. Verificación: pruebas con servidor real: sin sesión todo da 403 sin contenido, con sesión se sirven `index.html` y los ficheros de arranque, la API responde con la cookie de sesión, las notas persisten entre arranques, se rechaza `root` y la parada deja sin servidor PostgreSQL.
+- [x] 6.2 Integrar Electron.NET Core en el `Program` del host WASM (ventana con la dirección que lleva el token, parada de servidor y base de datos al cerrar) reutilizando el patrón de `is6`. Verificación: arrancar con `dotnet run` abre la ventana.
+- [x] 6.3 Verificar en la ventana real (X virtual): el WASM carga con la cookie de sesión (comprobando la incógnita de D5), la lista aparece obtenida de la API y un clic en añadir con el texto vacío muestra el mensaje de validación del servidor; al cerrar no queda ningún proceso. Verificación: capturas y resultado registrados para el informe, con el plan alternativo de D5 aplicado solo si hizo falta.
+- [x] 6.4 Documentar en `README.md` cómo ejecutar el host de escritorio WASM. Verificación: seguir las instrucciones en limpio abre la ventana.
 
 ## 7. Empaquetado y medidas
 
