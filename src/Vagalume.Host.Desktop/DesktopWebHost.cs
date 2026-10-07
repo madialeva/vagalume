@@ -1,6 +1,7 @@
 using Microsoft.EntityFrameworkCore;
 using Vagalume.Core;
 using Vagalume.Data;
+using Vagalume.Desktop.Hosting;
 using Vagalume.Postgres.Embedded;
 using Vagalume.UI;
 

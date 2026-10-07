@@ -18,6 +18,7 @@
     <ProjectReference Include="..\Vagalume.Data\Vagalume.Data.csproj" />
     <ProjectReference Include="..\Vagalume.UI\Vagalume.UI.csproj" />
     <ProjectReference Include="..\Vagalume.Postgres.Embedded\Vagalume.Postgres.Embedded.csproj" />
+    <ProjectReference Include="..\Vagalume.Desktop.Hosting\Vagalume.Desktop.Hosting.csproj" />
   </ItemGroup>
 
   <Import Project="..\..\eng\FetchPostgresBinaries.targets" />

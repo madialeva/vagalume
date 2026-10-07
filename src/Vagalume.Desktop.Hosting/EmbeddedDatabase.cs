@@ -1,4 +1,4 @@
-namespace Vagalume.Host.Desktop;
+namespace Vagalume.Desktop.Hosting;
 
 /// <summary>
 /// Holds the connection string of the embedded server once it has started, for components created afterwards.

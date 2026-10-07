@@ -2,6 +2,7 @@ using ElectronNET.API;
 using ElectronNET.API.Entities;
 using Microsoft.AspNetCore.Hosting.Server;
 using Microsoft.AspNetCore.Hosting.Server.Features;
+using Vagalume.Desktop.Hosting;
 using Vagalume.Postgres.Embedded;
 
 namespace Vagalume.Host.Desktop;

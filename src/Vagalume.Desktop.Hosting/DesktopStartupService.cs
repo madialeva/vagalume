@@ -1,7 +1,7 @@
 using Vagalume.Data;
 using Vagalume.Postgres.Embedded;
 
-namespace Vagalume.Host.Desktop;
+namespace Vagalume.Desktop.Hosting;
 
 /// <summary>
 /// Starts the embedded PostgreSQL and migrates the schema before the web server accepts requests,

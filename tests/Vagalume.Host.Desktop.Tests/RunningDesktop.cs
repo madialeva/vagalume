@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Hosting.Server;
 using Microsoft.AspNetCore.Hosting.Server.Features;
 using Microsoft.Extensions.DependencyInjection;
 using Npgsql;
+using Vagalume.Desktop.Hosting;
 using Vagalume.Host.Desktop;
 using Vagalume.Postgres.Embedded;
 using Vagalume.Testing;

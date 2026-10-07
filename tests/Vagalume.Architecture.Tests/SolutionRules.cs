@@ -19,8 +19,13 @@ public static class SolutionRules
         Rule("Vagalume.Host.Web", ["Vagalume.Core", "Vagalume.Data", "Vagalume.UI"], Electron, allowFrameworks: true),
         Rule(
             "Vagalume.Host.Desktop",
-            ["Vagalume.Core", "Vagalume.Data", "Vagalume.UI", "Vagalume.Postgres.Embedded"],
+            ["Vagalume.Core", "Vagalume.Data", "Vagalume.UI", "Vagalume.Postgres.Embedded", "Vagalume.Desktop.Hosting"],
             [],
+            allowFrameworks: true),
+        Rule(
+            "Vagalume.Desktop.Hosting",
+            ["Vagalume.Data", "Vagalume.Postgres.Embedded"],
+            [.. Container, .. Electron],
             allowFrameworks: true),
         Rule("Vagalume.Api.Contracts", [], [.. Container, .. Electron, .. Persistence]),
         Rule("Vagalume.Api", ["Vagalume.Core", "Vagalume.Api.Contracts"], [.. Container, .. Electron, .. Persistence], allowFrameworks: true),

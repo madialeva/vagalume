@@ -1,4 +1,4 @@
-namespace Vagalume.Host.Desktop;
+namespace Vagalume.Desktop.Hosting;
 
 /// <summary>
 /// Where the desktop host keeps the user's cluster and finds the PostgreSQL distribution that ships with the application.

@@ -23,7 +23,7 @@
 
 ## 5. Piezas comunes de escritorio
 
-- [ ] 5.1 Crear `Vagalume.Desktop.Hosting` y mover a él `SessionToken`, `LocalSessionGuard`, `DesktopOptions`, `EmbeddedDatabase` y `DesktopStartupService`, haciendo que `Host.Desktop` y sus pruebas lo usen y añadiendo la regla de arquitectura correspondiente. Verificación: `dotnet build` y las 10 pruebas de `Host.Desktop.Tests` y las de arquitectura pasan sin cambios de comportamiento.
+- [x] 5.1 Crear `Vagalume.Desktop.Hosting` y mover a él `SessionToken`, `LocalSessionGuard`, `DesktopOptions`, `EmbeddedDatabase` y `DesktopStartupService`, haciendo que `Host.Desktop` y sus pruebas lo usen y añadiendo la regla de arquitectura correspondiente. Verificación: `dotnet build` y las 10 pruebas de `Host.Desktop.Tests` y las de arquitectura pasan sin cambios de comportamiento.
 
 ## 6. Host de escritorio WASM
 

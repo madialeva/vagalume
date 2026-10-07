@@ -1,3 +1,4 @@
+using Vagalume.Desktop.Hosting;
 namespace Vagalume.Host.Desktop;
 
 /// <summary>

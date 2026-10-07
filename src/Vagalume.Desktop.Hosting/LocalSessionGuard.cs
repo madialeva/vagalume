@@ -1,7 +1,7 @@
 using Microsoft.AspNetCore.Http.Extensions;
 using Microsoft.Extensions.Primitives;
 
-namespace Vagalume.Host.Desktop;
+namespace Vagalume.Desktop.Hosting;
 
 /// <summary>
 /// Middleware that lets only the application window reach the local port: it checks the Host header,
