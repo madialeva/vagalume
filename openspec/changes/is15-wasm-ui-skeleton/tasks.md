@@ -11,8 +11,8 @@
 
 ## 3. Cliente HTTP
 
-- [ ] 3.1 Implementar en `Api.Client` `NotesApiClient` sobre `HttpClient` con la traducción de códigos de estado a las excepciones del contrato. Verificación: `dotnet build` pasa y la prueba de arquitectura confirma que solo depende de `Api.Contracts`.
-- [ ] 3.2 Pruebas del cliente contra el servidor real de 2.3: crear, listar, modificar, validación, no encontrada y conflicto traducidos a la excepción correcta. Verificación: las pruebas pasan.
+- [x] 3.1 Implementar en `Api.Client` `NotesApiClient` sobre `HttpClient` con la traducción de códigos de estado a las excepciones del contrato. Verificación: `dotnet build` pasa y la prueba de arquitectura confirma que solo depende de `Api.Contracts`.
+- [x] 3.2 Pruebas del cliente contra el servidor real de 2.3: crear, listar, modificar, validación, no encontrada y conflicto traducidos a la excepción correcta. Verificación: las pruebas pasan.
 
 ## 4. Interfaz WebAssembly sin Razor
 
