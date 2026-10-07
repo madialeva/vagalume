@@ -1,0 +1,110 @@
+@page "/"
+@inject NoteService Service
+
+<PageTitle>Notas</PageTitle>
+<h1>Notas</h1>
+
+<form class="new-note" @onsubmit="CreateAsync">
+    <input aria-label="Texto de la nota" @bind="_newText" @bind:event="oninput" placeholder="Escribe una nota" />
+    <button type="submit">Añadir</button>
+</form>
+
+@if (_message is not null)
+{
+    <p class="message" role="alert">@_message</p>
+}
+
+@if (_notes is null)
+{
+    <p>Cargando…</p>
+}
+else if (_notes.Count == 0)
+{
+    <p>Todavía no hay notas.</p>
+}
+else
+{
+    <ul class="notes">
+        @foreach (var note in _notes)
+        {
+            <li @key="note.Id">
+                @if (_editing == note.Id)
+                {
+                    <input aria-label="Editar nota" @bind="_editText" @bind:event="oninput" />
+                    <button type="button" @onclick="() => SaveAsync(note)">Guardar</button>
+                    <button type="button" @onclick="CancelEdit">Cancelar</button>
+                }
+                else
+                {
+                    <span class="text">@note.Text</span>
+                    <time datetime="@note.CreatedAt.ToString("O")">@note.CreatedAt.ToLocalTime().ToString("g")</time>
+                    <button type="button" @onclick="() => StartEdit(note)">Editar</button>
+                }
+            </li>
+        }
+    </ul>
+}
+
+@code {
+    private IReadOnlyList<Note>? _notes;
+    private string _newText = string.Empty;
+    private string _editText = string.Empty;
+    private Guid? _editing;
+    private string? _message;
+
+    protected override async Task OnInitializedAsync() => await ReloadAsync();
+
+    private async Task ReloadAsync() => _notes = await Service.ListAsync(CancellationToken.None);
+
+    private async Task CreateAsync()
+    {
+        await RunAsync(async () =>
+        {
+            await Service.CreateAsync(_newText, CancellationToken.None);
+            _newText = string.Empty;
+        });
+    }
+
+    private void StartEdit(Note note)
+    {
+        _editing = note.Id;
+        _editText = note.Text;
+        _message = null;
+    }
+
+    private void CancelEdit() => _editing = null;
+
+    private async Task SaveAsync(Note note)
+    {
+        await RunAsync(async () =>
+        {
+            await Service.UpdateTextAsync(note.Id, _editText, note.Version, CancellationToken.None);
+            _editing = null;
+        });
+    }
+
+    private async Task RunAsync(Func<Task> action)
+    {
+        _message = null;
+        try
+        {
+            await action();
+        }
+        catch (NoteValidationException error)
+        {
+            _message = error.Message;
+        }
+        catch (ConcurrencyConflictException)
+        {
+            _message = "Otra persona ha modificado esta nota. Se ha recargado la lista; vuelve a intentarlo.";
+            _editing = null;
+        }
+        catch (NoteNotFoundException)
+        {
+            _message = "La nota ya no existe.";
+            _editing = null;
+        }
+
+        await ReloadAsync();
+    }
+}

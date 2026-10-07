@@ -12,7 +12,7 @@
 
 ## 3. Interfaz compartida
 
-- [ ] 3.1 Implementar en `UI` los componentes de la página de notas (formulario de alta con validación, lista, edición con mensaje de conflicto) que inyectan los servicios de `Core`, y el componente de enrutado de la aplicación con modo de renderizado interactivo de servidor. Verificación: `dotnet build` pasa y la prueba de arquitectura confirma que `UI` solo depende de `Core`.
+- [x] 3.1 Implementar en `UI` los componentes de la página de notas (formulario de alta con validación, lista, edición con mensaje de conflicto) que inyectan los servicios de `Core`, y el componente de enrutado de la aplicación con modo de renderizado interactivo de servidor. Verificación: `dotnet build` pasa y la prueba de arquitectura confirma que `UI` solo depende de `Core`.
 
 ## 4. Host web
 
