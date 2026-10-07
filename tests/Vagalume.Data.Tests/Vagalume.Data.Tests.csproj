@@ -16,4 +16,6 @@
     <ProjectReference Include="..\Vagalume.Testing\Vagalume.Testing.csproj" />
   </ItemGroup>
 
+  <Import Project="..\..\eng\FetchPostgresBinaries.targets" />
+
 </Project>

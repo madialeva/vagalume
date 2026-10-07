@@ -90,9 +90,9 @@ else
         {
             await action();
         }
-        catch (NoteValidationException error)
+        catch (NoteValidationException)
         {
-            _message = error.Message;
+            _message = "El texto de la nota no puede estar vacío.";
         }
         catch (ConcurrencyConflictException)
         {

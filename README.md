@@ -112,6 +112,27 @@ with a message naming it; if the database cannot be reached it exits saying so.
 > and change the data, so do not expose it to the internet as it is. Users and
 > roles are tracked as a separate issue.
 
+### Desktop host
+
+`Vagalume.Host.Desktop` is the same application inside an Electron.NET Core
+window with its own embedded PostgreSQL. It needs **Node.js 22 or later** at
+build time and a display at run time:
+
+```bash
+dotnet run --project src/Vagalume.Host.Desktop
+```
+
+On start it creates the user's cluster (under the per-user data directory,
+`$XDG_DATA_HOME/Vagalume/data` on Linux), applies the migrations, serves the UI
+on a random `127.0.0.1` port and opens the window. Closing the window stops the
+web server and then PostgreSQL. The first build downloads Electron and the
+ASP.NET Core web assets once; the application never downloads anything while
+running.
+
+The local port is protected: every start generates a random token, the window
+exchanges it for an `HttpOnly` cookie, and any other request gets `403`. The
+token is kept out of the logs.
+
 PostgreSQL refuses to run as `root`; the host fails early with a clear error.
 
 ## Findings report (embedded PostgreSQL spike)
@@ -286,6 +307,36 @@ all of this may change.
   must be built on that platform** (a Windows package cannot be built on
   Linux; the tooling stops with error `ELECTRON100`).
 - **Size.** The unpacked Electron distribution for Linux is about 283 MB.
+
+### Desktop host findings
+
+- **The Blazor client script was missing at first.** The Web SDK only includes
+  `_framework/blazor.web.js` when the host project itself contains `.razor`
+  files; here they live in the shared UI library, so both hosts returned `404`
+  for the script and the page rendered but was never interactive. Setting
+  `RequiresAspNetWebAssets` to `true` in both host projects fixes it, and tests
+  now check that the script is served.
+- **The request log wrote the token.** ASP.NET Core logs the full URL of every
+  request, including the query string where the one-time token travels. The
+  desktop host raises that logger to `Warning`, and a test asserts that the
+  token never appears in any log message.
+- **Forced kill of the .NET host (`kill -9`)** leaves Electron running and
+  PostgreSQL up. Launching the application again starts a host that stops at
+  once, because Electron's single-instance lock is still held, and that host
+  also stops the reused PostgreSQL. The user has to close the orphaned window
+  before the application starts again. Forced kill of PostgreSQL itself is
+  recovered on the next launch with no loss of committed notes (automated test).
+- **Closing the window** (here the Electron main process was asked to quit)
+  ends everything cleanly: no host, Electron or PostgreSQL process remains and
+  `postmaster.pid` is removed.
+- **The interactive channel works in the real window.** In an Electron window
+  on a virtual display, clicking *Añadir* with an empty text shows the
+  validation message through the Blazor connection. Keyboard input could not
+  be injected without a window manager, so note creation through typing was
+  verified through the services, not through the window.
+- **Copying the PostgreSQL distribution into the build output follows
+  symbolic links**, so the copy takes about 123 MB instead of the 60 MB of the
+  extracted archive.
 
 Conclusion so far: workable and worth continuing, provided the orphan
 behavior is handled and the Electron version is pinned explicitly.

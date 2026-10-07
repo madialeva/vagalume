@@ -1,6 +1,3 @@
-var builder = WebApplication.CreateBuilder(args);
-var app = builder.Build();
+using Vagalume.Host.Desktop;
 
-app.MapGet("/", () => "Hello World!");
-
-app.Run();
+return await DesktopProgram.RunAsync(args);

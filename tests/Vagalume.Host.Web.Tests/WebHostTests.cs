@@ -23,6 +23,10 @@ public sealed class WebHostTests
         Assert.Equal(System.Net.HttpStatusCode.OK, empty.StatusCode);
         Assert.Contains("Notas", await empty.Content.ReadAsStringAsync(Ct), StringComparison.Ordinal);
 
+        var script = await client.GetAsync("/_framework/blazor.web.js", Ct);
+        Assert.Equal(System.Net.HttpStatusCode.OK, script.StatusCode);
+        Assert.True((await script.Content.ReadAsByteArrayAsync(Ct)).Length > 10_000, "the Blazor client script must be served");
+
         await app.Services.GetRequiredService<NoteService>().CreateAsync("desde el navegador", Ct);
 
         Assert.Contains("desde el navegador", await client.GetStringAsync("/", Ct), StringComparison.Ordinal);

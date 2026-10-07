@@ -1,10 +1,35 @@
 <Project Sdk="Microsoft.NET.Sdk.Web">
 
+  <PropertyGroup>
+    <!-- The Razor components live in Vagalume.UI, so the Web SDK does not detect them in this project and would
+         leave out the Blazor client script (_framework/blazor.web.js). -->
+    <RequiresAspNetWebAssets>true</RequiresAspNetWebAssets>
+    <!-- Electron.NET Core defaults to Electron 30.4.0, which is out of support and does not install under Node 24. -->
+    <ElectronVersion>44.5.1</ElectronVersion>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="ElectronNET.Core" />
+    <PackageReference Include="ElectronNET.Core.AspNet" />
+  </ItemGroup>
+
   <ItemGroup>
     <ProjectReference Include="..\Vagalume.Core\Vagalume.Core.csproj" />
     <ProjectReference Include="..\Vagalume.Data\Vagalume.Data.csproj" />
     <ProjectReference Include="..\Vagalume.UI\Vagalume.UI.csproj" />
     <ProjectReference Include="..\Vagalume.Postgres.Embedded\Vagalume.Postgres.Embedded.csproj" />
   </ItemGroup>
+
+  <Import Project="..\..\eng\FetchPostgresBinaries.targets" />
+
+  <!-- The PostgreSQL distribution of this platform travels in a "postgres" directory next to the executable. -->
+  <Target Name="CopyPostgresBinaries" AfterTargets="CopyFilesToOutputDirectory">
+    <ItemGroup>
+      <PostgresFiles Include="$(RepoRoot)artifacts/postgres/$(PostgresPlatform)/**/*" Exclude="$(RepoRoot)artifacts/postgres/$(PostgresPlatform)/.fetched" />
+    </ItemGroup>
+    <Copy SourceFiles="@(PostgresFiles)"
+          DestinationFiles="@(PostgresFiles->'$(OutDir)postgres/%(RecursiveDir)%(Filename)%(Extension)')"
+          SkipUnchangedFiles="true" />
+  </Target>
 
 </Project>
