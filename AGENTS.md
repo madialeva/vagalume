@@ -21,7 +21,10 @@ the GitHub issues and in the README.
 
 - **.NET 10** (SDK pinned in `global.json`), C# with nullable reference types
   enabled and warnings treated as errors (set in `Directory.Build.props`).
-- xUnit for tests, Npgsql as the PostgreSQL driver.
+- xUnit for tests, Npgsql as the PostgreSQL driver, EF Core (PostgreSQL only) for
+  persistence, Blazor Server (interactive server rendering only, no WebAssembly,
+  no REST API between UI and logic) for the UI, Electron.NET Core as the desktop
+  shell. Node.js 22 or later is needed to build and run the desktop host.
 - PostgreSQL binaries come from the Zonky `embedded-postgres-binaries` artifacts
   on Maven Central, for **Linux x64 and Windows x64** only (no macOS, no ARM).
   They are downloaded **at build time**, pinned by version and SHA-256 in a lock
@@ -31,6 +34,9 @@ the GitHub issues and in the README.
   authentication.
 - Do not add new NuGet packages (runtime or test) without an approved OpenSpec
   change.
+- NuGet versions are managed centrally in `Directory.Packages.props`
+  (Central Package Management): `PackageReference` items in projects carry no
+  `Version`.
 - Do not commit PostgreSQL binaries or any downloaded artifact.
 
 ## Commands
@@ -41,15 +47,32 @@ the GitHub issues and in the README.
 | `dotnet test`                             | Run all tests (integration tests start a real PostgreSQL) |
 | `dotnet format --verify-no-changes`       | Check formatting and analyzers                |
 | `dotnet format`                           | Apply formatting                              |
+| `dotnet run --project src/Vagalume.Host.Web` | Run the web host (needs `ConnectionStrings__Vagalume`) |
+| `dotnet run --project src/Vagalume.Host.Desktop` | Run the desktop host in an Electron window |
+| `dotnet publish src/Vagalume.Host.Desktop -c Release -r linux-x64 --self-contained` | Package the desktop app (build on the target OS) |
 
-The solution lives at the repository root (`Vagalume.slnx`):
-`src/Vagalume.Postgres.Embedded` (library), `tests/Vagalume.Postgres.Embedded.Tests`
-(unit tests under `Unit/`, integration tests under `Integration/`, trait
-`Category=Integration`) and `eng/` (binaries lock file and the file-based .NET
-script `fetch-postgres-binaries.cs`). `dotnet build` fetches the PostgreSQL
-binaries of the current platform into `artifacts/postgres/` (git-ignored).
-`dotnet test --filter Category=Integration` runs only the tests that start a
-real PostgreSQL. Npgsql is referenced by the library and the tests.
+Solution layout (`Vagalume.slnx`):
+
+- `src/Vagalume.Core`: domain and use cases, depends on nothing.
+- `src/Vagalume.Data`: EF Core, one migration chain; depends only on `Core`.
+- `src/Vagalume.UI`: Razor Class Library with the shared UI; depends only on `Core`.
+- `src/Vagalume.Host.Web`: composition root of the server host (external PostgreSQL).
+- `src/Vagalume.Host.Desktop`: composition root of the desktop host (embedded
+  PostgreSQL, Electron.NET, session-token guard).
+- `src/Vagalume.Postgres.Embedded`: the embedded PostgreSQL host library.
+- `tests/`: one project per source project, `Vagalume.Testing` (shared real
+  PostgreSQL test environment) and `Vagalume.Architecture.Tests` (reads the
+  `.csproj` files and fails on a forbidden reference).
+- `eng/`: binaries lock file, the file-based script `fetch-postgres-binaries.cs`
+  and `FetchPostgresBinaries.targets`, imported by every project that needs the
+  binaries.
+
+`dotnet build` fetches the PostgreSQL binaries of the current platform into
+`artifacts/postgres/` (git-ignored). Integration tests carry the trait
+`Category=Integration`; `dotnet test --filter Category=Integration` runs only
+those that start a real PostgreSQL. Both hosts set `RequiresAspNetWebAssets`
+because the Razor components live in `Vagalume.UI`; without it the Blazor client
+script is missing. Tests are never aimed at the real user data directory.
 
 Before handing off a change, run `dotnet format --verify-no-changes && dotnet
 build && dotnet test` and keep a buildable tree.
@@ -220,10 +243,11 @@ Each OpenSpec change is tracked on GitHub with this cycle:
 ## Current status
 
 - **Phase:** proof of concept.
-- **Active change:** none. `is1-embedded-postgres-spike` is archived: implemented
-  and validated on Linux x64; Windows x64 is not validated (see the findings
-  report in `README.md`). Backups are file-level because the minimal package has
-  no `pg_dump`/`pg_restore`.
-- **Repository state:** only the `main` branch exists and it has no commits yet.
-  The `develop/v0.1.0` branch and the `v0.1.0` milestone still have to be
-  created by the user before the cycle above applies.
+- **Archived changes:** `is1-embedded-postgres-spike` (embedded PostgreSQL host;
+  file-level backups because the minimal package has no `pg_dump`/`pg_restore`).
+- **Active change:** `is6-blazor-electron-skeleton`: implemented and validated on
+  Linux x64, waiting for the user's review and archive. Windows x64 is not
+  validated and the orphan-process behavior of Electron.NET Core is an open risk
+  (see the findings report in `README.md`).
+- **Repository state:** the default branch is `develop/v0.1.0`; the change work
+  lives on `change/is6-blazor-electron-skeleton`.

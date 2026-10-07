@@ -1,0 +1,17 @@
+<Project>
+
+  <PropertyGroup>
+    <RepoRoot>$([MSBuild]::NormalizeDirectory('$(MSBuildThisFileDirectory)', '..'))</RepoRoot>
+    <PostgresPlatform Condition="$([MSBuild]::IsOSPlatform('Linux'))">linux-amd64</PostgresPlatform>
+    <PostgresPlatform Condition="$([MSBuild]::IsOSPlatform('Windows'))">windows-amd64</PostgresPlatform>
+  </PropertyGroup>
+
+  <!-- Fetches the pinned PostgreSQL binaries of this platform; skipped while the lock file is unchanged. -->
+  <Target Name="FetchPostgresBinaries"
+          BeforeTargets="BeforeBuild"
+          Inputs="$(RepoRoot)eng/postgres-binaries.lock;$(RepoRoot)eng/fetch-postgres-binaries.cs"
+          Outputs="$(RepoRoot)artifacts/postgres/$(PostgresPlatform)/.fetched">
+    <Exec Command="dotnet &quot;$(RepoRoot)eng/fetch-postgres-binaries.cs&quot; &quot;$(RepoRoot)eng/postgres-binaries.lock&quot; &quot;$(RepoRoot)artifacts/postgres&quot; $(PostgresPlatform)" />
+  </Target>
+
+</Project>

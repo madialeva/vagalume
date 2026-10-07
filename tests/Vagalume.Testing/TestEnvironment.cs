@@ -1,11 +1,11 @@
 using Vagalume.Postgres.Embedded;
 
-namespace Vagalume.Postgres.Embedded.Tests.Integration;
+namespace Vagalume.Testing;
 
 /// <summary>
 /// Locates the repository, the fetched binaries and creates throwaway directories for integration tests.
 /// </summary>
-internal static class TestEnvironment
+public static class TestEnvironment
 {
     public static string RepoRoot { get; } = FindRepoRoot();
 

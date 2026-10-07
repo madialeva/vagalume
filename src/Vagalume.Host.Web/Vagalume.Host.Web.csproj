@@ -1,0 +1,15 @@
+<Project Sdk="Microsoft.NET.Sdk.Web">
+
+  <PropertyGroup>
+    <!-- The Razor components live in Vagalume.UI, so the Web SDK does not detect them in this project and would
+         leave out the Blazor client script (_framework/blazor.web.js). -->
+    <RequiresAspNetWebAssets>true</RequiresAspNetWebAssets>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\Vagalume.Core\Vagalume.Core.csproj" />
+    <ProjectReference Include="..\Vagalume.Data\Vagalume.Data.csproj" />
+    <ProjectReference Include="..\Vagalume.UI\Vagalume.UI.csproj" />
+  </ItemGroup>
+
+</Project>

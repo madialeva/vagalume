@@ -1,11 +1,11 @@
 using Vagalume.Postgres.Embedded;
 
-namespace Vagalume.Postgres.Embedded.Tests.Integration;
+namespace Vagalume.Testing;
 
 /// <summary>
 /// A host over a temporary data directory that is stopped and deleted when the test ends.
 /// </summary>
-internal sealed class TestCluster : IAsyncDisposable
+public sealed class TestCluster : IAsyncDisposable
 {
     private readonly string _root = TestEnvironment.NewTempDirectory();
 
