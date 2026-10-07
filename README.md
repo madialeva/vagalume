@@ -44,7 +44,7 @@ Work is tracked as GitHub issues. The table shows what is planned.
 | :----: | ----------------------------------------------------------------------------------------------------------------- | :----: | :---: |
 |   ✅   | Embedded PostgreSQL host: pinned and verified binaries, restricted access, crash recovery, backup and restore     | v0.1.0 |  #1   |
 |   ✅   | Blazor Server skeleton: layered solution, EF Core, web host, Electron.NET desktop host and packaging              | v0.1.0 |  #6   |
-|   ⬜   | Blazor WebAssembly UI without Razor, REST API and Electron.NET desktop host                                       | v0.1.0 |  #15  |
+|   ✅   | Blazor WebAssembly UI without Razor, REST API and Electron.NET desktop host                                       | v0.1.0 |  #15  |
 
 ## Platforms
 

@@ -262,15 +262,12 @@ Each OpenSpec change is tracked on GitHub with this cycle:
 
 - **Phase:** proof of concept.
 - **Archived changes:** `is1-embedded-postgres-spike` (embedded PostgreSQL host;
-  file-level backups because the minimal package has no `pg_dump`/`pg_restore`)
-  and `is6-blazor-electron-skeleton` (Blazor Server skeleton with web and
-  Electron.NET desktop hosts; validated on Linux x64, Windows x64 not validated,
-  orphan processes in Electron.NET Core are an open risk: see the findings
-  report in `README.md`).
-- **Active change:** `is15-wasm-ui-skeleton`: implemented and validated on Linux
-  x64, waiting for the user's review and archive. The WebAssembly alternative
-  works in desktop mode at a small cost over Blazor Server; Windows x64 and
-  typing in the real window are not validated (see the findings report in
-  `README.md`).
-- **Repository state:** the default branch is `develop/v0.1.0`; the change work
-  lives on `change/is15-wasm-ui-skeleton`.
+  file-level backups because the minimal package has no `pg_dump`/`pg_restore`),
+  `is6-blazor-electron-skeleton` (Blazor Server skeleton with web and Electron.NET
+  desktop hosts) and `is15-wasm-ui-skeleton` (Blazor WebAssembly UI without Razor,
+  REST API and WASM desktop host; works in desktop mode at a small cost over
+  Blazor Server). All validated on Linux x64 only; Windows x64 is not validated
+  and orphan processes in Electron.NET Core are an open risk: see the findings
+  reports in `README.md`.
+- **Active change:** none.
+- **Repository state:** the default branch is `develop/v0.1.0`.
