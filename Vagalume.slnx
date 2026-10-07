@@ -1,5 +1,8 @@
 <Solution>
   <Folder Name="/src/">
+    <Project Path="src/Vagalume.Api.Client/Vagalume.Api.Client.csproj" />
+    <Project Path="src/Vagalume.Api.Contracts/Vagalume.Api.Contracts.csproj" />
+    <Project Path="src/Vagalume.Api/Vagalume.Api.csproj" />
     <Project Path="src/Vagalume.Core/Vagalume.Core.csproj" />
     <Project Path="src/Vagalume.Data/Vagalume.Data.csproj" />
     <Project Path="src/Vagalume.Host.Desktop/Vagalume.Host.Desktop.csproj" />

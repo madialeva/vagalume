@@ -1,7 +1,7 @@
 ## 1. Solución, contratos y reglas de arquitectura
 
-- [ ] 1.1 Crear los proyectos `Vagalume.Api.Contracts`, `Vagalume.Api`, `Vagalume.Api.Client` bajo `src/` con las referencias de D3 y D4, añadir las versiones de los paquetes nuevos a `Directory.Packages.props` y añadirlos a `Vagalume.slnx`. Verificación: `dotnet build` pasa sin advertencias.
-- [ ] 1.2 Ampliar la prueba de arquitectura con las reglas de `solution-architecture` para los proyectos nuevos, incluida la comprobación de que `Wasm.UI` no contiene ficheros `.razor` ni `.cshtml`. Verificación: la prueba pasa con la solución real y falla, nombrando la infracción, con un ejemplo que viole una regla de referencias y con otro que contenga un `.razor`.
+- [x] 1.1 Crear los proyectos `Vagalume.Api.Contracts`, `Vagalume.Api`, `Vagalume.Api.Client` bajo `src/` con las referencias de D3 y D4, añadir las versiones de los paquetes nuevos a `Directory.Packages.props` y añadirlos a `Vagalume.slnx`. Verificación: `dotnet build` pasa sin advertencias.
+- [x] 1.2 Ampliar la prueba de arquitectura con las reglas de `solution-architecture` para los proyectos nuevos, incluida la comprobación de que `Wasm.UI` no contiene ficheros `.razor` ni `.cshtml`. Verificación: la prueba pasa con la solución real y falla, nombrando la infracción, con un ejemplo que viole una regla de referencias y con otro que contenga un `.razor`.
 
 ## 2. Contratos y API REST
 

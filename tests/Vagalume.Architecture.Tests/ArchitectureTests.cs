@@ -10,6 +10,31 @@ public sealed class ArchitectureTests
         var violations = SolutionRules.Check(Path.Combine(TestEnvironment.RepoRoot, "src"));
 
         Assert.Empty(violations);
+        Assert.Empty(SolutionRules.CheckNoRazorFiles(
+            Path.Combine(TestEnvironment.RepoRoot, "src"), SolutionRules.RazorFreeProjects));
+    }
+
+    [Fact]
+    public void RazorFileInARazorFreeProject_IsDetectedAndNamed()
+    {
+        var root = TestEnvironment.NewTempDirectory();
+        try
+        {
+            var project = Directory.CreateDirectory(Path.Combine(root, "Vagalume.Wasm.UI", "Pages"));
+            File.WriteAllText(Path.Combine(project.FullName, "Notes.razor"), "<h1>x</h1>");
+            Directory.CreateDirectory(Path.Combine(root, "Vagalume.Wasm.UI", "obj"));
+            File.WriteAllText(Path.Combine(root, "Vagalume.Wasm.UI", "obj", "Generated.razor"), string.Empty);
+
+            var violations = SolutionRules.CheckNoRazorFiles(root, ["Vagalume.Wasm.UI"]);
+
+            Assert.Equal(
+                [$"Vagalume.Wasm.UI must not contain Razor file {Path.Combine("Vagalume.Wasm.UI", "Pages", "Notes.razor")}."],
+                violations);
+        }
+        finally
+        {
+            Directory.Delete(root, recursive: true);
+        }
     }
 
     [Fact]

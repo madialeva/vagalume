@@ -22,7 +22,41 @@ public static class SolutionRules
             ["Vagalume.Core", "Vagalume.Data", "Vagalume.UI", "Vagalume.Postgres.Embedded"],
             [],
             allowFrameworks: true),
+        Rule("Vagalume.Api.Contracts", [], [.. Container, .. Electron, .. Persistence]),
+        Rule("Vagalume.Api", ["Vagalume.Core", "Vagalume.Api.Contracts"], [.. Container, .. Electron, .. Persistence], allowFrameworks: true),
+        Rule("Vagalume.Api.Client", ["Vagalume.Api.Contracts"], [.. Container, .. Electron, .. Persistence]),
     ];
+
+    /// <summary>Projects that must be written in C# only, without Razor syntax.</summary>
+    public static IReadOnlyList<string> RazorFreeProjects { get; } = [];
+
+    public static IReadOnlyList<string> CheckNoRazorFiles(string sourceDirectory, IEnumerable<string> projects)
+    {
+        var violations = new List<string>();
+        foreach (var project in projects)
+        {
+            var directory = Path.Combine(sourceDirectory, project);
+            if (!Directory.Exists(directory))
+            {
+                continue;
+            }
+
+            violations.AddRange(
+                Directory.EnumerateFiles(directory, "*.*", SearchOption.AllDirectories)
+                    .Where(f => f.EndsWith(".razor", StringComparison.OrdinalIgnoreCase)
+                        || f.EndsWith(".cshtml", StringComparison.OrdinalIgnoreCase))
+                    .Where(f => !IsBuildOutput(directory, f))
+                    .Select(f => $"{project} must not contain Razor file {Path.GetRelativePath(sourceDirectory, f)}."));
+        }
+
+        return violations;
+    }
+
+    private static bool IsBuildOutput(string projectDirectory, string file)
+    {
+        var first = Path.GetRelativePath(projectDirectory, file).Split(Path.DirectorySeparatorChar)[0];
+        return first is "bin" or "obj";
+    }
 
     public static IReadOnlyList<string> Check(string sourceDirectory)
     {
